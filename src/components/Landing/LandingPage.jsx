@@ -1,5 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './LandingPage.css';
 import logo from './logo.webp'; // Replace with your actual logo
 
@@ -32,7 +33,7 @@ const LandingPage = () => {
             <ul className="navbar-nav ms-auto">
               <li className="nav-item"><a className="nav-link" href="#features">Features</a></li>
               <li className="nav-item"><a className="nav-link" href="#about">About</a></li>
-              <li className="nav-item"><a className="btn btn-primary nav-btn" href="#">Sign Up</a></li>
+              
             </ul>
           </div>
         </div>
@@ -50,7 +51,7 @@ const LandingPage = () => {
           <div className="text-center">
             <h2 className="get-started-title">Ready to Get Started?</h2>
             <p className="get-started-description">Sign up today and revolutionize the way you manage your assets.</p>
-            <a href="#" className="btn btn-animated">Get Started</a>
+            <Link to="/login" className="btn btn-animated">Get Started</Link>
           </div>
         </div>
       </section>
