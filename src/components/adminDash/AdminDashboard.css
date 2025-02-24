@@ -1,0 +1,86 @@
+/* Dark Theme Styles */
+* {
+    font-family: 'Lucida', sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .dashboard-container {
+    display: flex;
+    background: #121212;
+    height: 100vh;
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    width: 250px;
+    background: #1F1F1F;
+    color: #E0E0E0;
+    padding: 20px;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .sidebar h2 {
+    font-size: 20px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    color: #28A745;
+  }
+  
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sidebar ul li {
+    margin: 15px 0;
+  }
+  
+  .sidebar ul li a {
+    color: #E0E0E0;
+    text-decoration: none;
+    font-size: 16px;
+    transition: 0.3s;
+  }
+  
+  .sidebar ul li a:hover {
+    color: #17A2B8;
+  }
+  
+  /* Dashboard Content */
+  .dashboard-content {
+    flex: 1;
+    padding: 30px;
+    color: #E0E0E0;
+  }
+  
+  .section {
+    background: #1F1F1F;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 2px 2px 10px rgba(0, 255, 255, 0.1);
+  }
+  
+  .section h2 {
+    font-size: 22px;
+    margin-bottom: 10px;
+    color: #28A745;
+  }
+  
+  .section p {
+    color: #B0B0B0;
+  }
+  
+  /* QR Scanner */
+  .qr-scanner {
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+    border: 2px solid #17A2B8;
+    border-radius: 10px;
+    padding: 10px;
+    background: #1F1F1F;
+  }
+  
