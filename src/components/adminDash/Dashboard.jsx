@@ -1,124 +1,79 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { QrReader } from "react-qr-reader";
-import { Link, Route, Routes } from "react-router-dom";
+import React from "react";
+import { FaBox, FaTools, FaUser } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import "./AdminDashboard.css";
 
 const AdminDashboard = () => {
   return (
     <div className="dashboard-container">
-      <AdminSidebar />
-      <div className="dashboard-content">
-        <Routes>
-          <Route path="assets" element={<Assets />} />
-          <Route path="qr-scanner" element={<QRScanner />} />
-          <Route path="reports" element={<Reports />} />
-          <Route path="settings" element={<Settings />} />
-          <Route path="users" element={<Users />} />
-        </Routes>
+      {/* Floating Background Circles */}
+      <div className="floating-circles">
+        <div className="circle"></div>
+        <div className="circle"></div>
+        <div className="circle"></div>
+        <div className="circle"></div>
+        <div className="circle"></div>
       </div>
-    </div>
-  );
-};
 
-// 🟢 Sidebar Component
-const AdminSidebar = () => {
-  return (
-    <div className="sidebar">
-      <h2>Admin Panel</h2>
-      <ul>
-        <li><Link to="assets">📦 Assets</Link></li>
-        <li><Link to="qr-scanner">📷 QR Scanner</Link></li>
-        <li><Link to="reports">📊 Reports</Link></li>
-        <li><Link to="users">👤 Users</Link></li>
-        <li><Link to="settings">⚙️ Settings</Link></li>
-      </ul>
-    </div>
-  );
-};
+      {/* Navbar */}
+      <nav className="navbar">
+        <h2 className="navbar-title">ADMIN PANEL</h2>
+        <div className="nav-links">
+          <Link to="/manageasset">Manage Assets</Link>
+          <Link to="/manageUsers">Manage Users</Link>
+          <Link to="/activityLogs">Activity Logs</Link>
+          <Link to="/qrscanner">QR Scanner</Link>
+          <Link to="/adminSetting">Settings</Link>
+        </div>
+      </nav>
 
-// 🟢 Assets Management
-const Assets = () => {
-  const [assets, setAssets] = useState([]);
+      {/* Dashboard Main Content */}
+      <main className="dashboard-main">
+        {/* Statistics Section */}
+        <div className="stats">
+          <div className="card">
+            <FaBox className="icon" /> 
+            <span>Total Assets: 120</span>
+          </div>
+          <div className="card">
+            <FaTools className="icon" /> 
+            <span>Under Maintenance: 10</span>
+          </div>
+          <div className="card">
+            <FaUser className="icon" /> 
+            <span>Total Users: 50</span>
+          </div>
+        </div>
 
-  useEffect(() => {
-    axios.get("/api/assets")
-      .then((res) => setAssets(res.data))
-      .catch((err) => console.error(err));
-  }, []);
-
-  return (
-    <div className="section">
-      <h2>📦 Manage Assets</h2>
-      <ul>
-        {assets.map((asset) => (
-          <li key={asset._id}>{asset.name} - {asset.serialNumber}</li>
-        ))}
-      </ul>
-    </div>
-  );
-};
-
-// 🟢 QR Code Scanner
-const QRScanner = () => {
-  const handleScan = (data) => {
-    if (data) {
-      alert(`Scanned Data: ${data}`);
-    }
-  };
-
-  return (
-    <div className="section">
-      <h2>📷 QR Code Scanner</h2>
-      <QrReader
-        delay={300}
-        onResult={(result, error) => {
-          if (result) handleScan(result.text);
-        }}
-        style={{ width: "100%", border: "2px solid cyan" }}
-      />
-    </div>
-  );
-};
-
-// 🟢 Reports Section
-const Reports = () => {
-  return (
-    <div className="section">
-      <h2>📊 Asset Reports</h2>
-      <p>View detailed asset usage reports.</p>
-    </div>
-  );
-};
-
-// 🟢 Settings Page
-const Settings = () => {
-  return (
-    <div className="section">
-      <h2>⚙️ Settings</h2>
-      <p>Configure admin dashboard settings.</p>
-    </div>
-  );
-};
-
-// 🟢 Manage Users
-const Users = () => {
-  const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    axios.get("/api/users")
-      .then((res) => setUsers(res.data))
-      .catch((err) => console.error(err));
-  }, []);
-
-  return (
-    <div className="section">
-      <h2>👤 Manage Users</h2>
-      <ul>
-        {users.map((user) => (
-          <li key={user._id}>{user.name} - {user.email}</li>
-        ))}
-      </ul>
+        {/* Recent Activity Table */}
+        <div className="logs">
+          <h3>Recent Activity</h3>
+          <table className="activity-table">
+            <thead>
+              <tr>
+                <th>Asset</th>
+                <th>User</th>
+                <th>Action</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Laptop</td>
+                <td>John Doe</td>
+                <td><span className="assigned">Assigned</span></td>
+                <td>2025-03-05</td>
+              </tr>
+              <tr>
+                <td>Projector</td>
+                <td>Jane Smith</td>
+                <td><span className="returned">Returned</span></td>
+                <td>2025-03-04</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </main>
     </div>
   );
 };

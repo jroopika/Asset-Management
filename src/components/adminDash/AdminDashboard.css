@@ -1,86 +1,213 @@
-/* Dark Theme Styles */
+/* Apply Lucida Font Globally */
 * {
-    font-family: 'Lucida', sans-serif;
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Dark Theme Background */
+body {
+  background-color: #121212;
+  color: #E0E0E0;
+}
+
+/* Admin Dashboard Styles */
+.dashboard-container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+  position: relative;
+  overflow: hidden; /* Ensures circles don't scroll */
+}
+
+/* Floating Background Circles (Only inside Admin Dashboard) */
+.dashboard-container .floating-circles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: -1; /* Behind all content */
+  pointer-events: none; /* Prevent interactions */
+}
+
+/* Floating Circle Animations */
+@keyframes float {
+  from {
+    transform: translateY(0px);
   }
-  
-  .dashboard-container {
-    display: flex;
-    background: #121212;
-    height: 100vh;
+  to {
+    transform: translateY(20px);
   }
-  
-  /* Sidebar */
-  .sidebar {
-    width: 250px;
-    background: #1F1F1F;
-    color: #E0E0E0;
-    padding: 20px;
-    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.dashboard-container .circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(244, 239, 242, 0.15); /* Light Glow */
+  animation: float 10s infinite alternate ease-in-out;
+}
+
+.dashboard-container .circle:nth-child(1) {
+  width: 100px;
+  height: 100px;
+  top: 10%;
+  left: 5%;
+  animation-duration: 12s;
+}
+
+.dashboard-container .circle:nth-child(2) {
+  width: 150px;
+  height: 150px;
+  top: 40%;
+  left: 20%;
+  animation-duration: 14s;
+}
+
+.dashboard-container .circle:nth-child(3) {
+  width: 200px;
+  height: 200px;
+  top: 70%;
+  left: 70%;
+  animation-duration: 16s;
+}
+
+.dashboard-container .circle:nth-child(4) {
+  width: 120px;
+  height: 120px;
+  top: 80%;
+  left: 30%;
+  animation-duration: 18s;
+}
+
+.dashboard-container .circle:nth-child(5) {
+  width: 180px;
+  height: 180px;
+  top: 20%;
+  left: 80%;
+  animation-duration: 15s;
+}
+
+/* Navbar Styles (Scoped to Admin Dashboard) */
+.dashboard-container .navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1F1F1F; /* Dark background */
+  padding: 25px 50px;
+  border-bottom: 2px solid #28A745;
+  width: 100%;
+}
+
+/* Title Styling */
+.dashboard-container .navbar-title {
+  color: #FFFFFF;
+  font-size: 24px;
+  font-weight: bold;
+  font-family: "Lucida Sans", sans-serif;
+  margin: 0;
+}
+
+/* Navbar Links */
+.dashboard-container .nav-links {
+  display: flex;
+  gap: 30px;
+}
+
+.dashboard-container .nav-links a {
+  color: #FFFFFF;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 18px;
+  padding: 10px 15px;
+  transition: color 0.3s ease-in-out;
+}
+
+.dashboard-container .nav-links a:hover {
+  color: #28A745;
+  text-decoration: underline;
+}
+
+/* Dashboard Heading */
+.dashboard-container h1 {
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+/* Stats Container */
+.dashboard-container .stats {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+/* Individual Stat Card */
+.dashboard-container .card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #1F1F1F;
+  padding: 25px;
+  border-radius: 10px;
+  width: 30%;
+  font-size: 20px;
+  font-weight: bold;
+  border: 2px solid #28A745;
+  transition: transform 0.3s ease;
+  min-height: 80px;
+}
+
+.dashboard-container .card:hover {
+  transform: scale(1.05);
+}
+
+/* Activity Logs Table */
+.dashboard-container .activity-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.dashboard-container .activity-table th,
+.dashboard-container .activity-table td {
+  padding: 20px;  /* Increased row height */
+  font-size: 18px; /* Bigger text */
+  text-align: left;
+  border-bottom: 1px solid #E0E0E0;
+}
+
+.dashboard-container .activity-table th {
+  background-color: #28A745;
+  color: #FFFFFF;
+  font-size: 16px;
+  text-transform: uppercase;
+}
+
+.dashboard-container .activity-table tr:nth-child(even) {
+  background-color: #1F1F1F;
+}
+
+.dashboard-container .activity-table tr:hover {
+  background-color: #28A745;
+  color: #FFFFFF;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .dashboard-container .stats {
+      flex-direction: column;
+      text-align: center;
   }
-  
-  .sidebar h2 {
-    font-size: 20px;
-    text-transform: uppercase;
-    margin-bottom: 20px;
-    color: #28A745;
+
+  .dashboard-container .nav-links {
+      flex-direction: column;
+      text-align: center;
   }
-  
-  .sidebar ul {
-    list-style: none;
-    padding: 0;
+
+  .dashboard-container .activity-table th,
+  .dashboard-container .activity-table td {
+      font-size: 14px;
   }
-  
-  .sidebar ul li {
-    margin: 15px 0;
-  }
-  
-  .sidebar ul li a {
-    color: #E0E0E0;
-    text-decoration: none;
-    font-size: 16px;
-    transition: 0.3s;
-  }
-  
-  .sidebar ul li a:hover {
-    color: #17A2B8;
-  }
-  
-  /* Dashboard Content */
-  .dashboard-content {
-    flex: 1;
-    padding: 30px;
-    color: #E0E0E0;
-  }
-  
-  .section {
-    background: #1F1F1F;
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    box-shadow: 2px 2px 10px rgba(0, 255, 255, 0.1);
-  }
-  
-  .section h2 {
-    font-size: 22px;
-    margin-bottom: 10px;
-    color: #28A745;
-  }
-  
-  .section p {
-    color: #B0B0B0;
-  }
-  
-  /* QR Scanner */
-  .qr-scanner {
-    width: 100%;
-    max-width: 500px;
-    margin: auto;
-    border: 2px solid #17A2B8;
-    border-radius: 10px;
-    padding: 10px;
-    background: #1F1F1F;
-  }
-  
+}

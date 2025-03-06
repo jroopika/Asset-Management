@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './LandingPage.css';
-import logo from './logo.webp'; // Replace with your actual logo
+import logo from './logo.webp';
 
 const LandingPage = () => {
   useEffect(() => {
@@ -90,21 +90,28 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* About Section */}
-      <section id="about" className="about-section">
-        <div className="container">
-          <h2 className="section-title">About Us</h2>
-          <p className="section-description">
-            Our mission is to simplify asset management for individuals and businesses through innovative technology and intuitive design.
-          </p>
-          <div className="card about-card">
-            <div className="card-body">
-              <h5 className="card-title">Our Vision</h5>
-              <p className="card-text">Empowering businesses with the tools they need to manage assets efficiently and securely.</p>
-            </div>
-          </div>
-        </div>
-      </section>
+     {/* About Section */}
+<section id="about" className="about-section">
+  <div className="container">
+    <h2 className="section-title">About Us</h2>
+    <div className="card about-card">
+      <div className="card-body">
+      <h5 className="card-title">Our mission</h5>
+      <p className="card-text">
+          To simplify asset management for individuals and businesses through innovative technology and intuitive design.
+        </p>
+      </div>
+    </div>
+    <div className="card about-card">
+      <div className="card-body">
+        <h5 className="card-title">Our Vision</h5>
+        <p className="card-text">
+          Empowering businesses with the tools they need to manage assets efficiently and securely.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
 
       {/* Footer Section */}
       <footer className="footer bg-dark text-light py-4">
