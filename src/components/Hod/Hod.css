@@ -1,0 +1,90 @@
+/* HOD Dashboard Styles */
+.hod-dashboard {
+    background: #121212;
+    min-height: 100vh;
+    color: #e0e0e0;
+    padding: 20px;
+}
+
+.hod-dashboard h2 {
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.card {
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 255, 170, 0.1);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: scale(1.02);
+    box-shadow: 0px 6px 15px rgba(0, 255, 170, 0.2);
+}
+
+.card-header {
+    font-weight: bold;
+    background: #28A745 !important;
+    color: white !important;
+    text-align: center;
+    font-size: 18px;
+}
+
+.card-body {
+    padding: 15px;
+}
+
+.table {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table th {
+    background: #17A2B8 !important;
+    color: white !important;
+    text-align: center;
+}
+
+.table td {
+    text-align: center;
+}
+
+.table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.btn {
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-success {
+    background: #28A745;
+    border: none;
+}
+
+.btn-danger {
+    background: #dc3545;
+    border: none;
+}
+
+.btn:hover {
+    transform: scale(1.1);
+}
+
+/* Notifications */
+.notifications-card {
+    border-left: 5px solid #FFC107;
+}
+
+.notifications-card .card-header {
+    background: #FFC107 !important;
+    color: #333 !important;
+}
+
+.notifications-card .card-body p {
+    font-size: 16px;
+    text-align: center;
+}

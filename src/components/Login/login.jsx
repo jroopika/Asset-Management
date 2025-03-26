@@ -4,6 +4,8 @@ import styles from "./LoginPage.module.css"; // Import styles as a CSS module
 
 const LoginPage = () => {
   const [flipped, setFlipped] = useState(false);
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState(""); // State for error message
   const navigate = useNavigate(); // Hook to navigate
 
   useEffect(() => {
@@ -17,22 +19,30 @@ const LoginPage = () => {
     setFlipped(!flipped);
   };
 
+  // Allowed College Domain
+  const allowedDomain = "kmit.in"; // Change this to your actual domain
+
   // Handle Login Submission
   const handleLogin = (e) => {
     e.preventDefault(); // Prevent form submission reload
-    navigate("/dashboard"); // Redirect to Dashboard
+
+    const emailDomain = email.split("@")[1]; // Extract domain from email
+    if (emailDomain !== allowedDomain) {
+      setError("❌ Only college members can log in!");
+      return;
+    }
+    navigate("/hod");
+   // navigate("/dashboard");
+   // navigate("/userDash");
   };
 
   return (
     <div className={styles["login-wrapper"]}>
-      {/* Animated background */}
-      <div className={styles["background-animation"]}>
+      {/* Background with soft effects (No Glitch) */}
+      <div className={styles["background"]}>
         <div className={styles["circle"]}></div>
         <div className={styles["circle"]}></div>
         <div className={styles["circle"]}></div>
-        <div className={styles["circle"]}></div>
-        <div className={styles["laptop"]}></div>
-        <div className={styles["laptop"]}></div>
       </div>
 
       {/* Login / Signup Container */}
@@ -40,8 +50,15 @@ const LoginPage = () => {
         {/* Login Card */}
         <div className={styles["login-card"]}>
           <h2 className={styles["title"]}>Login</h2>
+          {error && <p className={styles["error-message"]}>{error}</p>} {/* Show error */}
           <form onSubmit={handleLogin}>
-            <input type="email" placeholder="Email" required />
+            <input
+              type="email"
+              placeholder="Email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
             <input type="password" placeholder="Password" required />
             <button className={styles["login-button"]} type="submit">
               Login

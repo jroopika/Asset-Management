@@ -218,39 +218,12 @@ input {
 }
 
 /* ---------------------------- */
-/* Title with Glitch Animation */
+/* Title without Glitch Animation */
 /* ---------------------------- */
-@keyframes glitch {
-  0% {
-    transform: translate(0);
-  }
-  20% {
-    transform: translate(-2px, -2px);
-    color: #28a745;
-  }
-  40% {
-    transform: translate(2px, -1px);
-    color: #17a2b8;
-  }
-  60% {
-    transform: translate(-1px, 2px);
-    color: #9f86c0;
-  }
-  80% {
-    transform: translate(1px, 1px);
-    color: #be95c4;
-  }
-  100% {
-    transform: translate(0);
-    color: #28a745;
-  }
-}
-
 .title {
   font-size: 32px;
   color: #e0e0e0;
   text-transform: uppercase;
   letter-spacing: 1.5px;
   position: relative;
-  animation: glitch 1s infinite;
 }
