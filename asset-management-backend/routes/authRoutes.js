@@ -23,7 +23,6 @@ router.post("/signup", async (req, res) => {
         res.status(500).json({ error: "Server error" });
     }
 });
-
 // ✅ User Login API
 router.post("/login", async (req, res) => {
     try {
@@ -37,10 +36,19 @@ router.post("/login", async (req, res) => {
 
         const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-        res.status(200).json({ token, role: user.role });
+        res.status(200).json({
+            token,
+            role: user.role,
+            user: {
+                name: user.name,
+                email: user.email,
+                role: user.role,
+            }
+        });
     } catch (error) {
         res.status(500).json({ error: "Server error" });
     }
 });
+
 
 module.exports = router;

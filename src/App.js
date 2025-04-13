@@ -13,7 +13,12 @@ import HodSettings from './components/hodSettings/HodSetting';
 import HODNotifications from './components/hodnotifications/hodNotifications';
 import HODActivityLogs from './components/hodActivity/ActivityLogs';
 import Footer from "./components/Footer/Footer";
-
+import UserDashboard from "./components/userDash/UserDashboard";
+import Profile from './components/Profile/Profile';
+import RequestAsset from "./components/requestAsset/RequestAsset";
+import ScanQR from "./components/scanQR/ScanQR";
+import ReportIssue from "./components/reportIssue/ReportIssue";
+import UserActivityLogs from "./components/userActivityLogs/UserActivityLogs";
 const App = () => {
   return (
     <Router>
@@ -31,6 +36,12 @@ const App = () => {
           <Route path="/hodSettings" element={<HodSettings />} />
           <Route path="/hodnotifications" element={<HODNotifications />} />
           <Route path="/hodActivity" element={<HODActivityLogs />} />
+          <Route path="/userDashboard" element={<UserDashboard />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/requestAsset" element={<RequestAsset />} />
+          <Route path="/scanQR" element={<ScanQR />} />
+          <Route path="/reportIssue" element={<ReportIssue />} />
+          <Route path="/userActivityLogs" element={<UserActivityLogs />} />
           {/* Fallback route */}
           <Route path="*" element={<h1>Page Not Found</h1>} />
         </Routes>

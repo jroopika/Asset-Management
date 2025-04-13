@@ -1,73 +1,52 @@
-import React, { useState, useEffect } from "react";
-import "./ActivityLogs.css"; // Import CSS file
-import Input from "../ui/Input"; // Import Input component
+import React from "react";
+import { Link } from "react-router-dom";
+import "./ActivityLogs.css";
 
-const ActivityLogs = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [logs, setLogs] = useState([]);
-
-  useEffect(() => {
-    fetch("http://localhost:5000/api/activity-logs") // Change URL if needed
-      .then((response) => response.json())
-      .then((data) => setLogs(data))
-      .catch((error) => console.error("Error fetching logs:", error));
-  }, []);
-
-  const filteredLogs = logs.filter((log) =>
-    log.activity.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+const AdminActivityLogs = () => {
+  const activityData = [
+    { id: 1, action: "Asset Assigned to User", date: "March 25, 2025" },
+    { id: 2, action: "Asset Repaired", date: "March 22, 2025" },
+    { id: 3, action: "Asset Request Approved", date: "March 20, 2025" },
+  ];
 
   return (
-    <div className="activity-log-container">
-      {/* Floating Circles Background */}
-      <div className="floating-circles">
-        <span className="circle"></span>
-        <span className="circle"></span>
-        <span className="circle"></span>
-      </div>
+    <>
+      {/* ✅ Admin Navbar */}
+      <nav className="admin-navbar">
+        <h2 className="admin-navbar-title">ADMIN PANEL</h2>
+        <div className="admin-nav-links">
+          <Link to="/manageasset">Manage Assets</Link>
+          <Link to="/manageUsers">Manage Users</Link>
+          <Link to="/activityLogs">Activity Logs</Link>
+          <Link to="/qrscanner">QR Scanner</Link>
+          <Link to="/adminSetting">Settings</Link>
+        </div>
+      </nav>
 
-      <h2 className="activity-log-title">Activity Logs</h2>
-
-      <div className="search-container">
-        <Input
-          type="text"
-          placeholder="Search logs..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="search-input"
-        />
-      </div>
-
-      <div className="table-container">
-        <table className="activity-table">
+      {/* ✅ Activity Logs */}
+      <div className="admin-activity-container">
+        <h1 className="admin-activity-title">Admin Activity Logs</h1>
+        <table className="admin-activity-table">
           <thead>
             <tr>
-              <th>ID</th>
-              <th>User</th>
-              <th>Activity</th>
+              <th>#</th>
+              <th>Action</th>
               <th>Date</th>
             </tr>
           </thead>
           <tbody>
-            {filteredLogs.length > 0 ? (
-              filteredLogs.map((log) => (
-                <tr key={log.id}>
-                  <td>{log.id}</td>
-                  <td>{log.user}</td>
-                  <td>{log.activity}</td>
-                  <td>{new Date(log.date).toLocaleString()}</td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="4" className="no-activity">No activity logs found.</td>
+            {activityData.map((log) => (
+              <tr key={log.id}>
+                <td>{log.id}</td>
+                <td>{log.action}</td>
+                <td>{log.date}</td>
               </tr>
-            )}
+            ))}
           </tbody>
         </table>
       </div>
-    </div>
+    </>
   );
 };
 
-export default ActivityLogs;
+export default AdminActivityLogs;

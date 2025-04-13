@@ -1,17 +1,26 @@
 const mongoose = require("mongoose");
 
 const assetSchema = new mongoose.Schema({
-    serialNumber: { type: String, required: true, unique: true },
-    name: { type: String, required: true },
-    description: String,
-    status: { type: String, enum: ["available", "in use", "maintenance"], default: "available" },
-    qrCode: String,  // QR Code URL
-    history: [
-        {
-            action: String, // e.g., "Assigned to John Doe"
-            date: { type: Date, default: Date.now }
-        }
-    ]
+  serialNumber: { type: String, required: true, unique: true },
+  name: { type: String, required: true },
+  description: String,
+  status: {
+    type: String,
+    enum: ["available", "assigned", "in use", "maintenance"],
+    default: "available"
+  },
+  qrCode: String, // Base64 QR image
+  assignedTo: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    default: null
+  },
+  history: [
+    {
+      action: String,
+      date: { type: Date, default: Date.now }
+    }
+  ]
 }, { timestamps: true });
 
 module.exports = mongoose.model("Asset", assetSchema);

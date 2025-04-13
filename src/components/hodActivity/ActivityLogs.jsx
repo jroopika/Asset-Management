@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Card, Table, Container, Badge } from "react-bootstrap";
 import { FaCheck, FaTimes } from "react-icons/fa";
-import axios from "axios";
 import "./ActivityLogs.css";
 import HODNavbar from "../Login/Navbar"; // ✅ Importing the Navbar
 

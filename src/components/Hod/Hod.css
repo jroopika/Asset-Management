@@ -1,11 +1,12 @@
-/* HOD Dashboard Styles */
+/* HOD Dashboard Container */
 .hod-dashboard {
     background: #121212;
     min-height: 100vh;
     color: #e0e0e0;
-    padding: 20px;
+    padding: 20px 0; /* Remove horizontal padding to let grid handle it */
 }
 
+/* Dashboard Title */
 .hod-dashboard h2 {
     text-align: center;
     font-size: 28px;
@@ -13,78 +14,111 @@
     margin-bottom: 20px;
 }
 
-.card {
+/* Cards Styling */
+.hod-dashboard .card {
     border-radius: 12px;
     box-shadow: 0px 4px 10px rgba(0, 255, 170, 0.1);
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    background: #1f1f1f !important;
+    margin-bottom: 20px;
+    width: 100%; /* Ensure card takes full column width */
 }
 
-.card:hover {
+.hod-dashboard .card:hover {
     transform: scale(1.02);
     box-shadow: 0px 6px 15px rgba(0, 255, 170, 0.2);
+    z-index: 1; /* Keeps hovered card on top */
 }
 
-.card-header {
+/* Card Header */
+.hod-dashboard .card-header {
     font-weight: bold;
     background: #28A745 !important;
     color: white !important;
     text-align: center;
     font-size: 18px;
+    border-radius: 12px 12px 0 0;
 }
 
-.card-body {
+/* Card Body */
+.hod-dashboard .card-body {
     padding: 15px;
 }
 
-.table {
+/* Table Styling */
+.hod-dashboard .table {
     border-radius: 8px;
     overflow: hidden;
+    background: #2d2d2d;
 }
 
-.table th {
+.hod-dashboard .table th {
     background: #17A2B8 !important;
     color: white !important;
     text-align: center;
 }
 
-.table td {
+.hod-dashboard .table td {
     text-align: center;
 }
 
-.table tbody tr:hover {
+.hod-dashboard .table tbody tr:hover {
     background: rgba(255, 255, 255, 0.1);
 }
 
-.btn {
+/* Buttons */
+.hod-dashboard .btn {
     font-weight: bold;
     transition: all 0.3s ease-in-out;
+    margin: 0 5px;
 }
 
-.btn-success {
+.hod-dashboard .btn-success {
     background: #28A745;
     border: none;
 }
 
-.btn-danger {
+.hod-dashboard .btn-danger {
     background: #dc3545;
     border: none;
 }
 
-.btn:hover {
+.hod-dashboard .btn:hover {
     transform: scale(1.1);
 }
 
 /* Notifications */
-.notifications-card {
+.hod-dashboard .notifications-card {
     border-left: 5px solid #FFC107;
 }
 
-.notifications-card .card-header {
+.hod-dashboard .notifications-card .card-header {
     background: #FFC107 !important;
     color: #333 !important;
 }
 
-.notifications-card .card-body p {
+.hod-dashboard .notifications-card .card-body p {
     font-size: 16px;
     text-align: center;
+}
+
+/* Grid System Fixes */
+.hod-dashboard .row {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 0 auto; /* Center the row */
+}
+
+.hod-dashboard .col-md-6 {
+    padding: 0 15px;
+    flex: 0 0 50%; /* Ensure each column takes 50% */
+    max-width: 50%;
+}
+
+/* Ensure container fills space */
+.hod-dashboard .container {
+    width: 100% !important;
+    padding: 0 15px;
+    margin: 0 auto; /* Center the container */
 }

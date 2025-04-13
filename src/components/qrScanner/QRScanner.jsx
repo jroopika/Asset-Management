@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { QrReader } from "@blackbox-vision/react-qr-reader";
 import "./QRScanner.css";
 
@@ -9,9 +10,9 @@ const QRScanner = () => {
   const handleScan = (result, error) => {
     if (result?.text) {
       try {
-        const parsedData = JSON.parse(result.text); // Ensure JSON is valid
+        const parsedData = JSON.parse(result.text);
         setScannedData(parsedData);
-        setErrorMsg(""); // Clear any previous errors
+        setErrorMsg("");
       } catch (err) {
         console.error("Invalid QR Data:", result.text);
         setErrorMsg("Invalid QR code data");
@@ -24,17 +25,25 @@ const QRScanner = () => {
 
   return (
     <div className="qr-scanner-container">
-      {/* Floating Circles Animation */}
+      {/* Navbar */}
+      <nav className="navbar">
+        <h2 className="navbar-title">ADMIN PANEL</h2>
+        <div className="nav-links">
+          <Link to="/manageasset">Manage Assets</Link>
+          <Link to="/manageUsers">Manage Users</Link>
+          <Link to="/activityLogs">Activity Logs</Link>
+          <Link to="/qrscanner">QR Scanner</Link>
+          <Link to="/adminSetting">Settings</Link>
+        </div>
+      </nav>
+
+      {/* Floating Circles */}
       <div className="floating-circles"></div>
 
       <h2 className="qr-scanner-title">QR Code Scanner</h2>
 
       <div className="scanner-box">
-        <QrReader
-          onResult={handleScan}
-          constraints={{ facingMode: "environment" }} // Use back camera
-          style={{ width: "100%" }}
-        />
+        <QrReader onResult={handleScan} constraints={{ facingMode: "environment" }} style={{ width: "100%" }} />
       </div>
 
       {errorMsg && <p className="error-message">{errorMsg}</p>}

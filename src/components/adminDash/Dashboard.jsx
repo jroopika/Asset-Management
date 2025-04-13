@@ -32,15 +32,15 @@ const AdminDashboard = () => {
         {/* Statistics Section */}
         <div className="stats">
           <div className="card">
-            <FaBox className="icon" /> 
+            <FaBox className="icon" />
             <span>Total Assets: 120</span>
           </div>
           <div className="card">
-            <FaTools className="icon" /> 
+            <FaTools className="icon" />
             <span>Under Maintenance: 10</span>
           </div>
           <div className="card">
-            <FaUser className="icon" /> 
+            <FaUser className="icon" />
             <span>Total Users: 50</span>
           </div>
         </div>

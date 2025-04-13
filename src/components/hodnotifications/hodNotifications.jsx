@@ -1,11 +1,12 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Button, Card, Container, Nav, Navbar, Table, Badge } from "react-bootstrap";
 import { FaBell } from "react-icons/fa";
-import { Link } from "react-router-dom";
-// import axios from "axios"; // Uncomment for API integration
+import { Link, useNavigate } from "react-router-dom";
 
 const HODNotifications = () => {
+  const navigate = useNavigate();
+
   const [notifications, setNotifications] = useState([
     { id: 1, message: "Laptop request pending approval", is_read: false },
     { id: 2, message: "Projector request pending approval", is_read: false },
@@ -13,14 +14,17 @@ const HODNotifications = () => {
     { id: 4, message: "Mouse request rejected", is_read: true },
   ]);
 
-  // Count unread notifications
   const unreadCount = notifications.filter((notif) => !notif.is_read).length;
 
-  // Mark notification as read
   const markAsRead = (id) => {
     setNotifications((prev) =>
       prev.map((notif) => (notif.id === id ? { ...notif, is_read: true } : notif))
     );
+  };
+
+  const handleLogout = () => {
+    localStorage.clear(); // Or remove only token: localStorage.removeItem("token")
+    navigate("/login");
   };
 
   return (
@@ -39,6 +43,9 @@ const HODNotifications = () => {
                 <FaBell />
                 {unreadCount > 0 && <Badge bg="danger">{unreadCount}</Badge>}
               </Nav.Link>
+              <Button variant="outline-danger" className="ms-3" onClick={handleLogout}>
+                Logout
+              </Button>
             </Nav>
           </Navbar.Collapse>
         </Container>

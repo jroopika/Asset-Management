@@ -22,7 +22,6 @@ const HODDashboard = () => {
 
   const [unreadCount, setUnreadCount] = useState(notifications.filter(n => !n.is_read).length);
 
-  // Approve Request
   const handleApprove = (id) => {
     const approvedRequest = pendingRequests.find((req) => req.id === id);
     if (approvedRequest) {
@@ -32,21 +31,19 @@ const HODDashboard = () => {
     }
   };
 
-  // Reject Request
   const handleReject = (id) => {
     const rejectedRequest = pendingRequests.find((req) => req.id === id);
     setPendingRequests(pendingRequests.filter((req) => req.id !== id));
     addNotification(`${rejectedRequest.asset} request rejected`);
   };
 
-  // Add Notification
   const addNotification = (message) => {
     setNotifications([...notifications, { id: notifications.length + 1, message, is_read: false }]);
     setUnreadCount(prev => prev + 1);
   };
 
   return (
-    <div className="container-fluid p-0" style={{ background: "#121212", minHeight: "100vh" }}>
+    <div className="hod-dashboard" style={{ minHeight: "100vh" }}>
       {/* Navbar */}
       <Navbar bg="dark" variant="dark" expand="lg">
         <Container>
@@ -66,7 +63,7 @@ const HODDashboard = () => {
         </Container>
       </Navbar>
 
-      <div className="container mt-4 text-light">
+      <Container className="mt-4 text-light">
         <h2 className="mb-4">HOD Dashboard</h2>
 
         <div className="row">
@@ -145,7 +142,7 @@ const HODDashboard = () => {
             </Card>
           </div>
         </div>
-      </div>
+      </Container>
     </div>
   );
 };

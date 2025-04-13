@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
-import "./ManageAssets.css"; // Import CSS for styling
+import "./ManageAssets.css";
 
 const ManageAssets = () => {
   const [search, setSearch] = useState("");
@@ -20,11 +21,23 @@ const ManageAssets = () => {
 
   return (
     <div className="manage-assets">
+      {/* ✅ Navbar */}
+      <nav className="navbar">
+        <h2 className="navbar-title">ADMIN PANEL</h2>
+        <div className="nav-links">
+          <Link to="/manageasset">Manage Assets</Link>
+          <Link to="/manageUsers">Manage Users</Link>
+          <Link to="/activityLogs">Activity Logs</Link>
+          <Link to="/qrscanner">QR Scanner</Link>
+          <Link to="/adminSetting">Settings</Link>
+        </div>
+      </nav>
+
       {/* Floating Circles */}
       <div className="floating-circles">
-        <div className="floating-circle"></div>
-        <div className="floating-circle"></div>
-        <div className="floating-circle"></div>
+        <div className="floating-circle circle1"></div>
+        <div className="floating-circle circle2"></div>
+        <div className="floating-circle circle3"></div>
       </div>
 
       <h2>Manage Assets</h2>
@@ -64,7 +77,9 @@ const ManageAssets = () => {
             <tr key={asset.id}>
               <td>{asset.id}</td>
               <td>{asset.name}</td>
-              <td className={asset.status.toLowerCase()}>{asset.status}</td>
+              <td className={asset.status.toLowerCase().replace(" ", "-")}>
+                {asset.status}
+              </td>
               <td>{asset.user}</td>
               <td>
                 <FaEdit className="edit-icon" />

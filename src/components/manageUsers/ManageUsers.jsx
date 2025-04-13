@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { FaEdit, FaTrash, FaUserPlus } from "react-icons/fa";
-import "./ManageUsers.css"; // Make sure to import CSS
-
+import { Link } from "react-router-dom"; // Import Link
+import "./ManageUsers.css"; // Import CSS
 
 const ManageUsers = () => {
   const [users, setUsers] = useState([]);
 
-  // Fetch users from backend (replace with actual API call)
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch("/api/users"); // Replace with your actual API
+        const response = await fetch("/api/users"); // Replace with actual API
         const data = await response.json();
         setUsers(data);
       } catch (error) {
@@ -20,69 +19,73 @@ const ManageUsers = () => {
     fetchUsers();
   }, []);
 
-  // Handle Delete User
   const handleDelete = (id) => {
     setUsers(users.filter((user) => user.id !== id));
-    // Call API to delete user in backend
   };
-  
-    return (
+
+  return (
+    <div>
+      {/* ✅ Navbar Added */}
+      <nav className="navbar">
+        <h2 className="navbar-title">ADMIN PANEL</h2>
+        <div className="nav-links">
+          <Link to="/manageasset">Manage Assets</Link>
+          <Link to="/manageUsers">Manage Users</Link>
+          <Link to="/activityLogs">Activity Logs</Link>
+          <Link to="/qrscanner">QR Scanner</Link>
+          <Link to="/adminSetting">Settings</Link>
+        </div>
+      </nav>
+
       <div className="manage-users">
-      {/* Floating Circles */}
-      <div className="floating-circles">
-        <div className="floating-circle"></div>
-        <div className="floating-circle"></div>
-        <div className="floating-circle"></div>
-      </div>
-      <h2>Manage Users</h2>
+        <h2>Manage Users</h2>
 
-      {/* Add User Button */}
-      <button className="add-user-btn">
-        <FaUserPlus /> Add User
-      </button>
+        <button className="add-user-btn">
+          <FaUserPlus /> Add User
+        </button>
 
-      {/* Users Table */}
-      <div className="table-container">
-        <table className="users-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.length > 0 ? (
-              users.map((user) => (
-                <tr key={user.id}>
-                  <td>{user.id}</td>
-                  <td>{user.name}</td>
-                  <td>{user.email}</td>
-                  <td>{user.role}</td>
-                  <td>
-                    <button className="edit-btn">
-                      <FaEdit />
-                    </button>
-                    <button
-                      className="delete-btn"
-                      onClick={() => handleDelete(user.id)}
-                    >
-                      <FaTrash />
-                    </button>
+        <div className="table-container">
+          <table className="users-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.length > 0 ? (
+                users.map((user) => (
+                  <tr key={user.id}>
+                    <td>{user.id}</td>
+                    <td>{user.name}</td>
+                    <td>{user.email}</td>
+                    <td>{user.role}</td>
+                    <td>
+                      <button className="edit-btn">
+                        <FaEdit />
+                      </button>
+                      <button
+                        className="delete-btn"
+                        onClick={() => handleDelete(user.id)}
+                      >
+                        <FaTrash />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5" className="no-users">
+                    No users found
                   </td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="5" className="no-users">
-                  No users found
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

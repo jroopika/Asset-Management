@@ -1,57 +1,58 @@
 const express = require("express");
-const QRCode = require("qrcode");
-const asyncHandler = require("express-async-handler");
-const Asset = require("../models/Asset");
-const { protect, adminOnly } = require("../middleware/authMiddleware");
-
 const router = express.Router();
+const QRCode = require("qrcode");
+const Asset = require("../models/Asset");
 
-// ✅ Create an Asset with a QR Code
-router.post(
-  "/create",
-  protect,
-  adminOnly,
-  asyncHandler(async (req, res) => {
-    try {
-      const { serialNumber, name, description } = req.body;
+// 🆕 Create Asset with QR Code
+router.post("/create", async (req, res) => {
+  const { serialNumber, name, description } = req.body;
 
-      if (!serialNumber || !name || !description) {
-        return res.status(400).json({ success: false, message: "All fields are required" });
-      }
+  try {
+    // Create asset without QR first
+    const newAsset = new Asset({ serialNumber, name, description });
 
-      // Check if Asset already exists
-      const existingAsset = await Asset.findOne({ serialNumber });
-      if (existingAsset) {
-        return res.status(400).json({ success: false, message: "Asset already exists" });
-      }
+    // Generate QR Code using asset ID
+    const qrData = `http://yourdomain.com/asset/${newAsset._id}`;
+    const qrCode = await QRCode.toDataURL(qrData);
 
-      // 🌐 Generate QR Code URL for external users
-      const frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
-      const assetUrl = `${frontendUrl}/asset/${serialNumber}`;
+    // Save QR code and asset
+    newAsset.qrCode = qrCode;
+    await newAsset.save();
 
-      // 🔄 Generate QR Code (as Base64 Data URL)
-      const qrCodeImage = await QRCode.toDataURL(assetUrl);
+    res.status(201).json(newAsset);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to create asset" });
+  }
+});
 
-      // 🆕 Create Asset in DB
-      const newAsset = new Asset({
-        serialNumber,
-        name,
-        description,
-        qrCode: qrCodeImage, // Store QR code in DB
-      });
+// 🆕 Generate/Update QR Code for Existing Asset
+router.get("/generate-qr/:id", async (req, res) => {
+  try {
+    const asset = await Asset.findById(req.params.id);
+    if (!asset) return res.status(404).json({ message: "Asset not found" });
 
-      await newAsset.save();
+    const qrData = `http://localhost:5000/asset/${asset._id}`;
+    const qrCode = await QRCode.toDataURL(qrData);
 
-      res.status(201).json({
-        success: true,
-        message: "✅ Asset created successfully",
-        asset: newAsset,
-      });
-    } catch (error) {
-      console.error("❌ Error creating asset:", error);
-      res.status(500).json({ success: false, message: "Server error" });
-    }
-  })
-);
+    asset.qrCode = qrCode;
+    await asset.save();
+
+    res.status(200).json({ qrCode });
+  } catch (err) {
+    res.status(500).json({ message: "QR Code generation failed", error: err });
+  }
+});
+
+// ✅ Get Asset by ID (Public Route for QR Page)
+router.get("/public/:id", async (req, res) => {
+  try {
+    const asset = await Asset.findById(req.params.id);
+    if (!asset) return res.status(404).send("Asset not found");
+    res.json(asset);
+  } catch (err) {
+    res.status(500).send("Server error");
+  }
+});
 
 module.exports = router;
