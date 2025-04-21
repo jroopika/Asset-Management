@@ -1,14 +1,14 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const cors = require("cors"); // <-- Add this
+const cors = require("cors");
 require("dotenv").config();
 
 const app = express();
 
-// ✅ Enable CORS for frontend
+// ✅ Dynamic CORS (allow all origins during development)
 app.use(cors({
-  origin: "http://localhost:3000", // Frontend URL
-  credentials: true               // If using cookies or auth headers
+  origin: true,
+  credentials: true
 }));
 
 // ✅ Middlewares
@@ -40,6 +40,6 @@ mongoose.connect(process.env.MONGO_URI, {
 
 // ✅ Start Server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Server running on http://0.0.0.0:${PORT}`);
 });

@@ -19,6 +19,8 @@ import RequestAsset from "./components/requestAsset/RequestAsset";
 import ScanQR from "./components/scanQR/ScanQR";
 import ReportIssue from "./components/reportIssue/ReportIssue";
 import UserActivityLogs from "./components/userActivityLogs/UserActivityLogs";
+import AssetDetails from "./components/AssetDetails"; // AssetDetails import
+
 const App = () => {
   return (
     <Router>
@@ -42,6 +44,7 @@ const App = () => {
           <Route path="/scanQR" element={<ScanQR />} />
           <Route path="/reportIssue" element={<ReportIssue />} />
           <Route path="/userActivityLogs" element={<UserActivityLogs />} />
+          <Route path="/asset/:assetId" element={<AssetDetails />} />
           {/* Fallback route */}
           <Route path="*" element={<h1>Page Not Found</h1>} />
         </Routes>

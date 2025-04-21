@@ -9,8 +9,14 @@ const ManageUsers = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch("/api/users"); // Replace with actual API
+        const token = localStorage.getItem("token"); // Assuming token is stored in localStorage
+        const response = await fetch("/api/users", {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+          },
+        });
         const data = await response.json();
+        console.log("Fetched users:", data); // Check response
         setUsers(data);
       } catch (error) {
         console.error("Error fetching users:", error);
@@ -20,7 +26,7 @@ const ManageUsers = () => {
   }, []);
 
   const handleDelete = (id) => {
-    setUsers(users.filter((user) => user.id !== id));
+    setUsers(users.filter((user) => user._id !== id)); // Use _id for deleting
   };
 
   return (
@@ -32,7 +38,6 @@ const ManageUsers = () => {
           <Link to="/manageasset">Manage Assets</Link>
           <Link to="/manageUsers">Manage Users</Link>
           <Link to="/activityLogs">Activity Logs</Link>
-          <Link to="/qrscanner">QR Scanner</Link>
           <Link to="/adminSetting">Settings</Link>
         </div>
       </nav>
@@ -58,8 +63,8 @@ const ManageUsers = () => {
             <tbody>
               {users.length > 0 ? (
                 users.map((user) => (
-                  <tr key={user.id}>
-                    <td>{user.id}</td>
+                  <tr key={user._id}> {/* Use _id as key */}
+                    <td>{user._id}</td> {/* Use _id or another identifier */}
                     <td>{user.name}</td>
                     <td>{user.email}</td>
                     <td>{user.role}</td>
@@ -69,7 +74,7 @@ const ManageUsers = () => {
                       </button>
                       <button
                         className="delete-btn"
-                        onClick={() => handleDelete(user.id)}
+                        onClick={() => handleDelete(user._id)} // Use _id for deleting
                       >
                         <FaTrash />
                       </button>

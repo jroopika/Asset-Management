@@ -2,6 +2,7 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const { protect, adminOnly } = require("../middleware/authMiddleware");
 require("dotenv").config();
 
 const router = express.Router();
@@ -23,6 +24,7 @@ router.post("/signup", async (req, res) => {
         res.status(500).json({ error: "Server error" });
     }
 });
+
 // ✅ User Login API
 router.post("/login", async (req, res) => {
     try {
@@ -50,5 +52,43 @@ router.post("/login", async (req, res) => {
     }
 });
 
+// ✅ Get All Users (Admin Only)
+router.get("/users", protect, adminOnly, async (req, res) => {
+    try {
+        const users = await User.find().select("-password"); // Exclude passwords
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
+// ✅ Update User (Admin Only)
+router.put("/users/:id", protect, adminOnly, async (req, res) => {
+    try {
+        const { name, email, role } = req.body;
+        const updatedUser = await User.findByIdAndUpdate(
+            req.params.id,
+            { name, email, role },
+            { new: true }
+        );
+        if (!updatedUser) return res.status(404).json({ message: "User not found" });
+
+        res.json({ message: "User updated successfully", updatedUser });
+    } catch (error) {
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
+// ✅ Delete User (Admin Only)
+router.delete("/users/:id", protect, adminOnly, async (req, res) => {
+    try {
+        const user = await User.findByIdAndDelete(req.params.id);
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        res.json({ message: "User deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ message: "Server error" });
+    }
+});
 
 module.exports = router;

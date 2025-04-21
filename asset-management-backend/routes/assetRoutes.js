@@ -3,19 +3,27 @@ const router = express.Router();
 const QRCode = require("qrcode");
 const Asset = require("../models/Asset");
 
+// ✅ Fetch all assets
+router.get("/", async (req, res) => {
+  try {
+    const assets = await Asset.find().populate("assignedTo", "name email");
+    res.json(assets);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch assets", error: error.message });
+  }
+});
+
 // 🆕 Create Asset with QR Code
 router.post("/create", async (req, res) => {
   const { serialNumber, name, description } = req.body;
 
   try {
-    // Create asset without QR first
     const newAsset = new Asset({ serialNumber, name, description });
 
     // Generate QR Code using asset ID
     const qrData = `http://yourdomain.com/asset/${newAsset._id}`;
     const qrCode = await QRCode.toDataURL(qrData);
 
-    // Save QR code and asset
     newAsset.qrCode = qrCode;
     await newAsset.save();
 
@@ -52,6 +60,26 @@ router.get("/public/:id", async (req, res) => {
     res.json(asset);
   } catch (err) {
     res.status(500).send("Server error");
+  }
+});
+
+// Update an asset
+router.put("/:id", async (req, res) => {
+  try {
+    const asset = await Asset.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.status(200).json(asset);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+// Delete an asset
+router.delete("/:id", async (req, res) => {
+  try {
+    await Asset.findByIdAndDelete(req.params.id);
+    res.status(200).json({ message: "Asset deleted successfully" });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
 });
 

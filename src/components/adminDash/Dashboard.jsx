@@ -22,7 +22,6 @@ const AdminDashboard = () => {
           <Link to="/manageasset">Manage Assets</Link>
           <Link to="/manageUsers">Manage Users</Link>
           <Link to="/activityLogs">Activity Logs</Link>
-          <Link to="/qrscanner">QR Scanner</Link>
           <Link to="/adminSetting">Settings</Link>
         </div>
       </nav>

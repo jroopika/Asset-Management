@@ -3,7 +3,7 @@
     background: #121212;
     min-height: 100vh;
     color: #e0e0e0;
-    padding: 20px 0; /* Remove horizontal padding to let grid handle it */
+    padding: 20px; /* Adjusted padding for consistent spacing */
 }
 
 /* Dashboard Title */
@@ -21,13 +21,13 @@
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
     background: #1f1f1f !important;
     margin-bottom: 20px;
-    width: 100%; /* Ensure card takes full column width */
 }
 
+/* Hover Effect for Cards */
 .hod-dashboard .card:hover {
     transform: scale(1.02);
     box-shadow: 0px 6px 15px rgba(0, 255, 170, 0.2);
-    z-index: 1; /* Keeps hovered card on top */
+    z-index: 1;
 }
 
 /* Card Header */
@@ -66,7 +66,7 @@
     background: rgba(255, 255, 255, 0.1);
 }
 
-/* Buttons */
+/* Buttons Styling */
 .hod-dashboard .btn {
     font-weight: bold;
     transition: all 0.3s ease-in-out;
@@ -102,23 +102,21 @@
     text-align: center;
 }
 
-/* Grid System Fixes */
+/* Bootstrap Grid Fix for HOD Dashboard */
 .hod-dashboard .row {
     display: flex;
     justify-content: center;
-    width: 100%;
-    margin: 0 auto; /* Center the row */
+    gap: 20px; /* Adjusted to handle spacing better */
 }
 
+/* Ensure proper column width */
 .hod-dashboard .col-md-6 {
-    padding: 0 15px;
-    flex: 0 0 50%; /* Ensure each column takes 50% */
-    max-width: 50%;
+    flex: 0 0 48%; /* Allows for proper alignment with space between columns */
 }
 
 /* Ensure container fills space */
 .hod-dashboard .container {
-    width: 100% !important;
+    width: 100%;
     padding: 0 15px;
-    margin: 0 auto; /* Center the container */
+    margin: 0 auto;
 }
