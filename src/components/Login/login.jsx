@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUser, signupUser } from "../../services/api"; // Make sure both are defined
+import { loginUser, signupUser } from "../../services/api"; // ✅
 import styles from "./LoginPage.module.css";
 
 const LoginPage = () => {
@@ -37,10 +37,11 @@ const LoginPage = () => {
     }
 
     try {
-      const { token, role } = await loginUser(email, password);
+      const { token, role, user } = await loginUser(email, password); // ✅ ensure user is returned here
 
       localStorage.setItem("token", token);
       localStorage.setItem("role", role);
+      localStorage.setItem("user", JSON.stringify(user)); // Store the user object in localStorage
 
       switch (role) {
         case "admin":

@@ -17,6 +17,7 @@ const AdminActivityLogs = () => {
         <div className="admin-nav-links">
           <Link to="/manageasset">Manage Assets</Link>
           <Link to="/manageUsers">Manage Users</Link>
+            <Link to="/AdminReq">Manage Requests</Link>
           <Link to="/activityLogs">Activity Logs</Link>
           <Link to="/adminSetting">Settings</Link>
         </div>
