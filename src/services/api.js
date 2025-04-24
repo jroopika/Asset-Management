@@ -8,11 +8,10 @@ const api = axios.create({
   timeout: 5000, // Optional: Prevent hanging requests
 });
 
-// ✅ Helper to Get Auth Header
 const getAuthHeader = () => {
-  const token = localStorage.getItem("token");
-  if (!token) throw new Error("Authentication token missing");
-  return { Authorization: `Bearer ${token}` };
+  const token = localStorage.getItem('token');
+  if (!token) throw new Error('Authentication token missing');
+  return { headers: { Authorization: `Bearer ${token}` } };
 };
 
 // ✅ LOGIN USER
@@ -59,15 +58,14 @@ export const getAssets = async () => {
 // ✅ FETCH SINGLE ASSET BY ID (Public)
 export const getAssetById = async (assetId) => {
   try {
-    const response = await api.get(`/assets/public/${assetId}`, {
-      headers: getAuthHeader(),
-    });
+    const response = await api.get(`/assets/public/${assetId}`); // 🚫 No auth header needed
     return response.data;
   } catch (err) {
     console.error("Fetching asset by ID failed:", err);
     throw err;
   }
 };
+
 
 // ✅ FETCH ALL REQUESTS
 export const getAllRequests = async () => {

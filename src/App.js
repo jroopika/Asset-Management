@@ -44,6 +44,8 @@ const App = () => {
           <Route path="/userActivityLogs" element={<UserActivityLogs />} />
           <Route path="/asset/:assetId" element={<AssetDetails />} />
           <Route path ="/AdminReq" element ={<AdminRequests/>} />
+          <Route path="/report-issue/:assetId" element={<ReportIssue />} />
+
           {/* Fallback route */}
           <Route path="*" element={<h1>Page Not Found</h1>} />
         </Routes>
