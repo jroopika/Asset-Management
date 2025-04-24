@@ -1,19 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { fetchLogs } from "../../services/api";  // Import the fetchLogs function
 import QuickActionsNavbar from "../quickActions/QuickActionsNavbar";
 import "./UserActivityLogs.css";
 
 const UserActivityLogs = () => {
-  const activityData = [
-    { id: 1, action: "Laptop assigned", date: "March 25, 2025" },
-    { id: 2, action: "Mouse replaced", date: "March 22, 2025" },
-    { id: 3, action: "Keyboard request pending", date: "March 20, 2025" },
-  ];
+  const [activityData, setActivityData] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    // Retrieve the JWT token from local storage
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      // Fetch logs from the API using the token
+      fetchLogs(token)
+        .then((data) => {
+          setActivityData(data);  // Set the data to state
+        })
+        .catch((err) => {
+          setError("Failed to fetch activity logs.");
+        });
+    } else {
+      setError("No token found.");
+    }
+  }, []);  // Empty dependency array to fetch logs once on component mount
 
   return (
     <>
       <QuickActionsNavbar />
       <div className="page-container">
         <h1>User Activity Logs</h1>
+        {error && <p className="error-message">{error}</p>}
         <table className="activity-table">
           <thead>
             <tr>
@@ -23,13 +40,19 @@ const UserActivityLogs = () => {
             </tr>
           </thead>
           <tbody>
-            {activityData.map((log) => (
-              <tr key={log.id}>
-                <td>{log.id}</td>
-                <td>{log.action}</td>
-                <td>{log.date}</td>
+            {activityData.length > 0 ? (
+              activityData.map((log) => (
+                <tr key={log._id}>
+                  <td>{log._id}</td>
+                  <td>{log.action}</td>
+                  <td>{new Date(log.timestamp).toLocaleDateString()}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="3">No logs available</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>

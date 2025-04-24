@@ -182,7 +182,7 @@ const ManageAssets = () => {
               <td>{asset.assignedTo ? asset.assignedTo.name : "-"}</td>
               <td style={{ padding: "10px" }}>
   <QRCodeSVG
-    value={`http://192.168.0.23:3000/asset/${asset._id}`} // 👈 your laptop IP instead of localhost
+    value={`http://192.168.0.10:3000/asset/${asset._id}`} // 👈 your laptop IP instead of localhost
     size={100}
     bgColor="#ffffff"
     fgColor="#000000"

@@ -4,6 +4,7 @@ import { Button, Card, Container, Nav, Navbar, Table, Badge } from "react-bootst
 import { FaBell, FaCheck, FaTimes } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import './Hod.css';
 
 const HODDashboard = () => {
   const [pendingRequests, setPendingRequests] = useState([]);
@@ -14,17 +15,17 @@ const HODDashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const pendingResponse = await axios.get("http://localhost:5000/api/requests/pending");
-        setPendingRequests(pendingResponse.data);
+        const pendingRes = await axios.get("http://localhost:5000/api/requests/pending");
+        setPendingRequests(pendingRes.data);
 
-        const assignedResponse = await axios.get("http://localhost:5000/api/assignments/assigned");
-        setAssignedAssets(assignedResponse.data);
+        const assignedRes = await axios.get("http://localhost:5000/api/assignments/assigned");
+        setAssignedAssets(assignedRes.data);
 
-        const notificationsResponse = await axios.get("http://localhost:5000/api/notifications");
-        setNotifications(notificationsResponse.data);
-        setUnreadCount(notificationsResponse.data.filter(n => !n.is_read).length);
-      } catch (error) {
-        console.error("Error fetching data:", error);
+        const notifRes = await axios.get("http://localhost:5000/api/notifications");
+        setNotifications(notifRes.data);
+        setUnreadCount(notifRes.data.filter(n => !n.is_read).length);
+      } catch (err) {
+        console.error("Error fetching data:", err);
       }
     };
 
@@ -33,40 +34,31 @@ const HODDashboard = () => {
 
   const handleApprove = async (_id) => {
     try {
-      const response = await axios.put(`http://localhost:5000/api/requests/${_id}/approve`);
-      const approvedRequest = response.data;
+      const res = await axios.put(`http://localhost:5000/api/requests/${_id}/approve`);
+      const approved = res.data;
 
-      setAssignedAssets([...assignedAssets, { ...approvedRequest, status: "Assigned" }]);
-      setPendingRequests(pendingRequests.filter((req) => req._id !== _id));
-      addNotification(`${approvedRequest.asset} request approved`);
-    } catch (error) {
-      console.error("Error approving request:", error);
+      setAssignedAssets([...assignedAssets, { ...approved, status: "Assigned" }]);
+      setPendingRequests(pendingRequests.filter(req => req._id !== _id));
+      addNotification(`${approved.asset} request approved`);
+    } catch (err) {
+      console.error("Error approving request:", err);
     }
   };
 
   const handleReject = async (_id) => {
     try {
       await axios.put(`http://localhost:5000/api/requests/${_id}/reject`);
-      setPendingRequests(pendingRequests.filter((req) => req._id !== _id));
-      addNotification(`Request for asset with ID ${_id} rejected`);
-    } catch (error) {
-      console.error("Error rejecting request:", error);
+      setPendingRequests(pendingRequests.filter(req => req._id !== _id));
+      addNotification(`Request for asset ID ${_id} rejected`);
+    } catch (err) {
+      console.error("Error rejecting request:", err);
     }
   };
 
   const addNotification = (message) => {
-    setNotifications([...notifications, { id: notifications.length + 1, message, is_read: false }]);
-    setUnreadCount((prev) => prev + 1);
-  };
-
-  const markAsRead = async (_id) => {
-    try {
-      await axios.put(`http://localhost:5000/api/notifications/${_id}/mark-read`);
-      setNotifications(notifications.map((n) => (n._id === _id ? { ...n, is_read: true } : n)));
-      setUnreadCount(notifications.filter((n) => !n.is_read).length);
-    } catch (error) {
-      console.error("Error marking notification as read:", error);
-    }
+    const newNotif = { id: notifications.length + 1, message, is_read: false };
+    setNotifications([...notifications, newNotif]);
+    setUnreadCount(prev => prev + 1);
   };
 
   return (
@@ -92,9 +84,10 @@ const HODDashboard = () => {
       <Container className="mt-4 text-light">
         <h2 className="mb-4">HOD Dashboard</h2>
 
-        <div className="row">
-          <div className="col-md-6">
-            <Card bg="dark" text="light" className="mb-4 shadow-lg">
+        <div className="row g-4">
+          {/* Pending Requests */}
+          <div className="col-12 col-md-6 col-lg-4">
+            <Card bg="dark" text="light" className="shadow-lg">
               <Card.Header className="text-center">📋 Pending Asset Requests</Card.Header>
               <Card.Body>
                 {pendingRequests.length > 0 ? (
@@ -111,8 +104,9 @@ const HODDashboard = () => {
                       {pendingRequests.map((req, index) => (
                         <tr key={req._id}>
                           <td>{index + 1}</td>
-                          <td>{req.asset}</td>
-                          <td>{req.user}</td>
+                          <td>{req?.assetName || 'N/A'}</td>
+<td>{req?.userName || 'N/A'}</td>
+
                           <td>
                             <Button variant="success" size="sm" className="me-2" onClick={() => handleApprove(req._id)}>
                               <FaCheck /> Approve
@@ -132,8 +126,9 @@ const HODDashboard = () => {
             </Card>
           </div>
 
-          <div className="col-md-6">
-            <Card bg="dark" text="light" className="mb-4 shadow-lg">
+          {/* Assigned Assets */}
+          <div className="col-12 col-md-6 col-lg-4">
+            <Card bg="dark" text="light">
               <Card.Header className="text-center">✅ Assigned Assets</Card.Header>
               <Card.Body>
                 {assignedAssets.length > 0 ? (
@@ -165,29 +160,6 @@ const HODDashboard = () => {
               </Card.Body>
             </Card>
           </div>
-        </div>
-
-        <div className="mt-5">
-          <Card bg="dark" text="light" className="shadow-lg">
-            <Card.Header className="text-center">🔔 Notifications</Card.Header>
-            <Card.Body>
-              {notifications.length > 0 ? (
-                <ul className="list-unstyled">
-                  {notifications.map((notif) => (
-                    <li
-                      key={notif._id || notif.id}
-                      style={{ cursor: "pointer", textDecoration: notif.is_read ? "line-through" : "none" }}
-                      onClick={() => markAsRead(notif._id)}
-                    >
-                      {notif.message}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-center">No new notifications</p>
-              )}
-            </Card.Body>
-          </Card>
         </div>
       </Container>
     </div>

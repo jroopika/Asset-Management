@@ -6,7 +6,6 @@ import LandingPage from './components/Landing/LandingPage';
 import LoginPage from './components/Login/login';
 import ManageAssets from './components/manageasset/ManageAssets';
 import ManageUsers from './components/manageUsers/ManageUsers';
-import QRScanner from './components/qrScanner/QRScanner';
 import Settings from './components/adminSetting/Setting';
 import HODDashboard from './components/Hod/Hod';
 import HodSettings from './components/hodSettings/HodSetting';
@@ -32,7 +31,6 @@ const App = () => {
           <Route path="/manageasset" element={<ManageAssets />} />
           <Route path="/manageUsers" element={<ManageUsers />} />
           <Route path="/activityLogs" element={<ActivityLog />} />
-          <Route path="/qrScanner" element={<QRScanner />} />
           <Route path="/adminSetting" element={<Settings />} />
           <Route path="/hod" element={<HODDashboard />} />
           <Route path="/hodSettings" element={<HodSettings />} />
