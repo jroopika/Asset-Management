@@ -23,6 +23,8 @@ const logRoutes = require("./routes/logRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
 const issuesRoute = require('./routes/issues');
 app.use('/api/issues', issuesRoute);
+
+
 // ✅ Use Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/assets", assetRoutes);

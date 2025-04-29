@@ -31,17 +31,17 @@ const ManageUsers = () => {
 
   return (
     <div>
-      {/* ✅ Navbar Added */}
-      <nav className="navbar">
-        <h2 className="navbar-title">ADMIN PANEL</h2>
-        <div className="nav-links">
-          <Link to="/manageasset">Manage Assets</Link>
-          <Link to="/manageUsers">Manage Users</Link>
-            <Link to="/AdminReq">Manage Requests</Link>
-          <Link to="/activityLogs">Activity Logs</Link>
-          <Link to="/adminSetting">Settings</Link>
-        </div>
-      </nav>
+      {/* Navbar */}
+            <nav className="navbar">
+              <h2 className="navbar-title">ADMIN PANEL</h2>
+              <div className="nav-links">
+                <Link to="/manageasset">Manage Assets</Link>
+                <Link to="/manageUsers">Manage Users</Link>
+                  <Link to="/AdminReq">Manage Requests</Link>
+                <Link to="/AdminIssues">Issues </Link>
+                <Link to="/adminSetting">Settings</Link>
+              </div>
+            </nav>
 
       <div className="manage-users">
         <h2>Manage Users</h2>

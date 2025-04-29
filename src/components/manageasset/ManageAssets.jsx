@@ -134,7 +134,7 @@ const ManageAssets = () => {
           <Link to="/manageasset">Manage Assets</Link>
           <Link to="/manageUsers">Manage Users</Link>
             <Link to="/AdminReq">Manage Requests</Link>
-          <Link to="/activityLogs">Activity Logs</Link>
+          <Link to="/AdminIssues">Issues </Link>
           <Link to="/adminSetting">Settings</Link>
         </div>
       </nav>
@@ -181,13 +181,14 @@ const ManageAssets = () => {
               </td>
               <td>{asset.assignedTo ? asset.assignedTo.name : "-"}</td>
               <td style={{ padding: "10px" }}>
-  <QRCodeSVG
-    value={`http://192.168.0.10:3000/asset/${asset._id}`} // 👈 your laptop IP instead of localhost
-    size={100}
-    bgColor="#ffffff"
-    fgColor="#000000"
-    style={{ border: "1px solid #ccc", borderRadius: "8px" }}
-  />
+              <QRCodeSVG
+   value={`http://192.168.40.116:3000/asset/${asset._id}`} // UPDATED
+  size={100}
+  bgColor="#ffffff"
+  fgColor="#000000"
+  style={{ border: "1px solid #ccc", borderRadius: "8px" }}
+/>
+
 </td>
 
               <td>

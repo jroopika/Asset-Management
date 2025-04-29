@@ -9,9 +9,17 @@ const protect = async (req, res, next) => {
     try {
       token = token.split(" ")[1];
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = await User.findById(decoded.id).select("-password");
+
+      // ✅ Corrected: use decoded.userId
+      req.user = await User.findById(decoded.userId).select("-password");
+
+      if (!req.user) {
+        return res.status(401).json({ message: "User not found" });
+      }
+
       next();
     } catch (error) {
+      console.error(error);
       return res.status(401).json({ message: "Not authorized, token failed" });
     }
   } else {

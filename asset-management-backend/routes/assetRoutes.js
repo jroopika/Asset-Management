@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const QRCode = require("qrcode");
 const Asset = require("../models/Asset");
 
 // ✅ Fetch all assets
@@ -10,6 +9,24 @@ router.get("/", async (req, res) => {
     res.json(assets);
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch assets", error: error.message });
+  }
+});
+
+// assetsRoutes.js
+router.get("/checkByName", async (req, res) => {
+  const { assetName } = req.query; // assetName passed as a query parameter
+
+  try {
+    const asset = await Asset.findOne({ name: { $regex: assetName, $options: "i" } }); // Case-insensitive search
+
+    if (asset) {
+      res.status(200).json(asset); // Return asset details (including assetId)
+    } else {
+      res.status(404).json({ message: "Asset not found" }); // If no asset found
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error searching for asset", error: error.message });
   }
 });
 

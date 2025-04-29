@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import ActivityLog from './components/activityLogs/ActivityLogs';
+import AdminIssues from './components/AdminIssues/IssuesPage';  // Fixed typo here
 import Dashboard from './components/adminDash/Dashboard';
 import LandingPage from './components/Landing/LandingPage';
 import LoginPage from './components/Login/login';
@@ -20,6 +20,7 @@ import ReportIssue from "./components/reportIssue/ReportIssue";
 import UserActivityLogs from "./components/userActivityLogs/UserActivityLogs";
 import AssetDetails from "./components/AssetDetails"; // AssetDetails import
 import AdminRequests from './components/AdminReq/AdminRequests';
+
 const App = () => {
   return (
     <Router>
@@ -30,7 +31,7 @@ const App = () => {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/manageasset" element={<ManageAssets />} />
           <Route path="/manageUsers" element={<ManageUsers />} />
-          <Route path="/activityLogs" element={<ActivityLog />} />
+          <Route path="/AdminIssues" element={<AdminIssues />} /> {/* Admin Issues Route */}
           <Route path="/adminSetting" element={<Settings />} />
           <Route path="/hod" element={<HODDashboard />} />
           <Route path="/hodSettings" element={<HodSettings />} />
@@ -43,7 +44,7 @@ const App = () => {
           <Route path="/reportIssue" element={<ReportIssue />} />
           <Route path="/userActivityLogs" element={<UserActivityLogs />} />
           <Route path="/asset/:assetId" element={<AssetDetails />} />
-          <Route path ="/AdminReq" element ={<AdminRequests/>} />
+          <Route path="/AdminReq" element={<AdminRequests />} />
           <Route path="/report-issue/:assetId" element={<ReportIssue />} />
 
           {/* Fallback route */}

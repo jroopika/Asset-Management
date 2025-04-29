@@ -1,11 +1,11 @@
 import axios from "axios";
 
-const BASE_URL = "http://192.168.0.10:5000/api"; // 🛠 Your LAN IP
+const BASE_URL = `${window.location.origin.replace(":3000", ":5000")}/api`;
 
 // ✅ Create Axios Instance
 const api = axios.create({
   baseURL: BASE_URL,
-  timeout: 5000, // Optional: Prevent hanging requests
+  timeout: 10000, // Optional: Prevent hanging requests
 });
 
 const getAuthHeader = () => {
