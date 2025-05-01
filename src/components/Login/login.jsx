@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUser, signupUser } from "../../services/api"; // ✅
+import { loginUser, signupUser } from "../../services/api";
 import styles from "./LoginPage.module.css";
 
 const LoginPage = () => {
@@ -16,15 +16,69 @@ const LoginPage = () => {
   const allowedDomain = "kmit.in";
 
   useEffect(() => {
+    // Clear localStorage and reset form states
+    localStorage.clear();
+    setEmail("");
+    setPassword("");
+    setSignupUsername("");
+    setSignupEmail("");
+    setSignupPassword("");
+    setError("");
+    setFlipped(false);
+
+    // Reset body classes to remove theme classes from AdminSettings
+    document.body.className = "";
     document.body.classList.add(styles["login-body"]);
+
+    // Ensure URL is /login
+    if (window.location.pathname !== "/login") {
+      navigate("/login", { replace: true });
+    }
+
+    // Add popstate listener to prevent back navigation
+    const handlePopState = () => {
+      if (window.location.pathname !== "/login") {
+        navigate("/login", { replace: true });
+      }
+    };
+    window.addEventListener("popstate", handlePopState);
+
+    // Clean up on unmount
     return () => {
       document.body.classList.remove(styles["login-body"]);
+      window.removeEventListener("popstate", handlePopState);
     };
-  }, []);
+  }, [navigate]);
+
+  // Check for existing authentication
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+    if (token && role) {
+      switch (role) {
+        case "admin":
+          navigate("/dashboard", { replace: true });
+          break;
+        case "hod":
+          navigate("/hod", { replace: true });
+          break;
+        case "user":
+          navigate("/userDashboard", { replace: true });
+          break;
+        default:
+          navigate("/userDashboard", { replace: true });
+      }
+    }
+  }, [navigate]);
 
   const handleFlip = () => {
     setFlipped(!flipped);
     setError("");
+    setEmail("");
+    setPassword("");
+    setSignupUsername("");
+    setSignupEmail("");
+    setSignupPassword("");
   };
 
   const handleLogin = async (e) => {
@@ -37,24 +91,24 @@ const LoginPage = () => {
     }
 
     try {
-      const { token, role, user } = await loginUser(email, password); // ✅ ensure user is returned here
+      const { token, role, user } = await loginUser(email, password);
 
       localStorage.setItem("token", token);
       localStorage.setItem("role", role);
-      localStorage.setItem("user", JSON.stringify(user)); // Store the user object in localStorage
+      localStorage.setItem("user", JSON.stringify(user));
 
       switch (role) {
         case "admin":
-          navigate("/dashboard");
+          navigate("/dashboard", { replace: true });
           break;
         case "hod":
-          navigate("/hod");
+          navigate("/hod", { replace: true });
           break;
         case "user":
-          navigate("/userDashboard");
+          navigate("/userDashboard", { replace: true });
           break;
         default:
-          navigate("/userDashboard");
+          navigate("/userDashboard", { replace: true });
       }
     } catch (err) {
       setError(`❌ ${err.response?.data?.message || "Login failed"}`);
@@ -71,23 +125,27 @@ const LoginPage = () => {
     }
 
     try {
-      const { token, role } = await signupUser(signupUsername, signupEmail, signupPassword);
+      const { token, role } = await signupUser(
+        signupUsername,
+        signupEmail,
+        signupPassword
+      );
 
       localStorage.setItem("token", token);
       localStorage.setItem("role", role);
 
       switch (role) {
         case "admin":
-          navigate("/dashboard");
+          navigate("/dashboard", { replace: true });
           break;
         case "hod":
-          navigate("/hod");
+          navigate("/hod", { replace: true });
           break;
         case "user":
-          navigate("/userDashboard");
+          navigate("/userDashboard", { replace: true });
           break;
         default:
-          navigate("/dashboard");
+          navigate("/dashboard", { replace: true });
       }
     } catch (err) {
       setError(`❌ ${err.response?.data?.message || "Signup failed"}`);
@@ -96,16 +154,15 @@ const LoginPage = () => {
 
   return (
     <div className={styles["login-wrapper"]}>
-      {/* Background animation */}
       <div className={styles["background"]}>
         <div className={styles["circle"]}></div>
         <div className={styles["circle"]}></div>
         <div className={styles["circle"]}></div>
       </div>
 
-      {/* Login/Signup Flip Container */}
-      <div className={`${styles["login-container"]} ${flipped ? styles["flip"] : ""}`}>
-        {/* Login Card */}
+      <div
+        className={`${styles["login-container"]} ${flipped ? styles["flip"] : ""}`}
+      >
         <div className={styles["login-card"]}>
           <h2 className={styles["title"]}>Login</h2>
           {error && <p className={styles["error-message"]}>{error}</p>}
@@ -133,7 +190,6 @@ const LoginPage = () => {
           </span>
         </div>
 
-        {/* Signup Card */}
         <div className={styles["signup-card"]}>
           <h2 className={styles["title"]}>Sign Up</h2>
           {error && <p className={styles["error-message"]}>{error}</p>}

@@ -10,11 +10,11 @@ import {
   Navbar,
 } from "react-bootstrap";
 import { FaBell } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import { Link} from "react-router-dom";
 import "./HodSetting.css"; // Import the CSS file
 
 const HODSettings = () => {
-  const navigate = useNavigate();
+  
   const [hodDetails, setHodDetails] = useState({
     name: "Dr. Rajesh Kumar",
     email: "rajesh.kumar@example.com",
@@ -46,9 +46,10 @@ const HODSettings = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
+    localStorage.removeItem('token');
+    window.location.href = '/login';
   };
+  
 
   return (
     <div className="hod-settings-container">

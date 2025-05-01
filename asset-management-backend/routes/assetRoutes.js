@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Asset = require("../models/Asset");
+const QRCode = require('qrcode');
 
 // ✅ Fetch all assets
 router.get("/", async (req, res) => {

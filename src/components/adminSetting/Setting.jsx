@@ -3,9 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "./Setting.css";
 
 const AdminSettings = () => {
-  const navigate = useNavigate();
   const [message, setMessage] = useState("");
-
   const [adminData, setAdminData] = useState({
     username: "Manideep",
     empid: "123",
@@ -16,6 +14,8 @@ const AdminSettings = () => {
     theme: localStorage.getItem("theme") || "dark",
     notification: true,
   });
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     document.body.classList.add(`theme-${adminData.theme}`);
@@ -41,8 +41,26 @@ const AdminSettings = () => {
   };
 
   const handleLogout = () => {
+    // Clear all localStorage
     localStorage.clear();
-    navigate("/login");
+
+    // Navigate to login with replace to avoid adding to history
+    navigate("/login", { replace: true });
+
+    // Push multiple login entries to block back navigation
+    window.history.pushState(null, "", "/login");
+    window.history.pushState(null, "", "/login");
+
+    // Add popstate listener to prevent back navigation
+    const handlePopState = () => {
+      navigate("/login", { replace: true });
+    };
+    window.addEventListener("popstate", handlePopState);
+
+    // Clean up listener on component unmount
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
   };
 
   return (
@@ -55,7 +73,9 @@ const AdminSettings = () => {
           <Link to="/AdminReq">Manage Requests</Link>
           <Link to="/AdminIssues">Issues</Link>
           <Link to="/adminSetting">Settings</Link>
-          <button onClick={handleLogout} className="logout-button">Logout</button>
+          <button onClick={handleLogout} className="logout-button">
+            Logout
+          </button>
         </div>
       </nav>
 
@@ -65,22 +85,54 @@ const AdminSettings = () => {
 
         <form className="admin-settings-form">
           <label>Username:</label>
-          <input type="text" name="username" value={adminData.username} onChange={handleChange} />
+          <input
+            type="text"
+            name="username"
+            value={adminData.username}
+            onChange={handleChange}
+          />
 
           <label>Emp ID:</label>
-          <input type="text" name="empid" value={adminData.empid} onChange={handleChange} />
+          <input
+            type="text"
+            name="empid"
+            value={adminData.empid}
+            onChange={handleChange}
+          />
 
           <label>Department:</label>
-          <input type="text" name="dept" value={adminData.dept} onChange={handleChange} />
+          <input
+            type="text"
+            name="dept"
+            value={adminData.dept}
+            onChange={handleChange}
+          />
 
           <label>Email:</label>
-          <input type="email" name="email" value={adminData.email} onChange={handleChange} />
+          <input
+            type="email"
+            name="email"
+            value={adminData.email}
+            onChange={handleChange}
+          />
 
           <label>New Password:</label>
-          <input type="password" name="password" value={adminData.password} onChange={handleChange} placeholder="Enter new password" />
+          <input
+            type="password"
+            name="password"
+            value={adminData.password}
+            onChange={handleChange}
+            placeholder="Enter new password"
+          />
 
           <label>Confirm Password:</label>
-          <input type="password" name="confirmPassword" value={adminData.confirmPassword} onChange={handleChange} placeholder="Confirm new password" />
+          <input
+            type="password"
+            name="confirmPassword"
+            value={adminData.confirmPassword}
+            onChange={handleChange}
+            placeholder="Confirm new password"
+          />
 
           <label>Theme:</label>
           <select name="theme" value={adminData.theme} onChange={handleChange}>
@@ -89,11 +141,22 @@ const AdminSettings = () => {
           </select>
 
           <label>
-            <input type="checkbox" name="notification" checked={adminData.notification} onChange={handleChange} />
+            <input
+              type="checkbox"
+              name="notification"
+              checked={adminData.notification}
+              onChange={handleChange}
+            />
             Enable Notifications
           </label>
 
-          <button type="button" className="admin-save-btn" onClick={handleSave}>Save Changes</button>
+          <button
+            type="button"
+            className="admin-save-btn"
+            onClick={handleSave}
+          >
+            Save Changes
+          </button>
         </form>
       </div>
     </>

@@ -33,7 +33,7 @@ export const signupUser = async (name, email, password) => {
       name,
       email,
       password,
-      role: "user",
+      role: "user", // Default role
     });
     return response.data;
   } catch (err) {
@@ -65,7 +65,6 @@ export const getAssetById = async (assetId) => {
     throw err;
   }
 };
-
 
 // ✅ FETCH ALL REQUESTS
 export const getAllRequests = async () => {
@@ -106,4 +105,28 @@ export const fetchLogs = async () => {
     console.error("Fetching logs failed:", err);
     throw err;
   }
+};
+
+// ✅ FETCH ALL USERS
+export const getAllUsers = async () => {
+  const response = await api.get("/auth/users", getAuthHeader());
+  return response.data;
+};
+
+// Correct endpoint
+export const createUser = async (userData) => {
+  const response = await api.post("/auth/signup", userData); // No token needed for signup
+  return response.data;
+};
+
+// ✅ UPDATE USER
+export const updateUser = async (id, userData) => {
+  const response = await api.put(`/auth/users/${id}`, userData, getAuthHeader());
+  return response.data;
+};
+
+// ✅ DELETE USER
+export const deleteUser = async (id) => {
+  const response = await api.delete(`/auth/users/${id}`, getAuthHeader());
+  return response.data;
 };
