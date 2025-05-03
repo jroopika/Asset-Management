@@ -26,22 +26,22 @@ const LoginPage = () => {
     setError("");
     setFlipped(false);
 
-    // Reset body classes to remove theme classes from AdminSettings
+    // Reset body classes
     document.body.className = "";
     document.body.classList.add(styles["login-body"]);
 
     // Ensure URL is /login
-    if (window.location.pathname !== "/login") {
-      navigate("/login", { replace: true });
-    }
+    navigate("/login", { replace: true });
 
     // Add popstate listener to prevent back navigation
     const handlePopState = () => {
-      if (window.location.pathname !== "/login") {
-        navigate("/login", { replace: true });
-      }
+      navigate("/login", { replace: true });
     };
     window.addEventListener("popstate", handlePopState);
+
+    // Push multiple /login entries to block back navigation
+    window.history.pushState(null, null, "/login");
+    window.history.pushState(null, null, "/login");
 
     // Clean up on unmount
     return () => {
@@ -125,11 +125,7 @@ const LoginPage = () => {
     }
 
     try {
-      const { token, role } = await signupUser(
-        signupUsername,
-        signupEmail,
-        signupPassword
-      );
+      const { token, role } = await signupUser(signupUsername, signupEmail, signupPassword);
 
       localStorage.setItem("token", token);
       localStorage.setItem("role", role);
@@ -160,9 +156,7 @@ const LoginPage = () => {
         <div className={styles["circle"]}></div>
       </div>
 
-      <div
-        className={`${styles["login-container"]} ${flipped ? styles["flip"] : ""}`}
-      >
+      <div className={`${styles["login-container"]} ${flipped ? styles["flip"] : ""}`}>
         <div className={styles["login-card"]}>
           <h2 className={styles["title"]}>Login</h2>
           {error && <p className={styles["error-message"]}>{error}</p>}

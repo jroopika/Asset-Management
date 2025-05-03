@@ -10,11 +10,10 @@ import {
   Navbar,
 } from "react-bootstrap";
 import { FaBell } from "react-icons/fa";
-import { Link} from "react-router-dom";
-import "./HodSetting.css"; // Import the CSS file
+import { Link, useNavigate } from "react-router-dom";
+import "./HodSetting.css";
 
 const HODSettings = () => {
-  
   const [hodDetails, setHodDetails] = useState({
     name: "Dr. Rajesh Kumar",
     email: "rajesh.kumar@example.com",
@@ -26,7 +25,9 @@ const HODSettings = () => {
   });
 
   const [message, setMessage] = useState("");
-  const [unreadCount] = useState(3); // Removed setUnreadCount to avoid warnings
+  const [unreadCount] = useState(3);
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setHodDetails({ ...hodDetails, [e.target.name]: e.target.value });
@@ -46,27 +47,40 @@ const HODSettings = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    window.location.href = '/login';
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    localStorage.removeItem("user");
+    // Clear history stack by pushing a new entry and replacing
+    window.history.pushState(null, null, "/login");
+    navigate("/login", { replace: true });
   };
-  
 
   return (
     <div className="hod-settings-container">
       <Navbar className="hod-navbar" expand="lg">
         <Container>
-          <Navbar.Brand as={Link} to="/hod">HOD Dashboard</Navbar.Brand>
+          <Navbar.Brand as={Link} to="/hod">
+            HOD Dashboard
+          </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
-              <Nav.Link as={Link} to="/hod">Home</Nav.Link>
-              <Nav.Link as={Link} to="/hodActivity">Activity Logs</Nav.Link>
-              <Nav.Link as={Link} to="/hodSettings">Settings</Nav.Link>
+              <Nav.Link as={Link} to="/hod">
+                Home
+              </Nav.Link>
+              <Nav.Link as={Link} to="/hodActivity">
+                Activity Logs
+              </Nav.Link>
+              <Nav.Link as={Link} to="/hodSettings">
+                Settings
+              </Nav.Link>
               <Nav.Link as={Link} to="/hodnotifications" className="hod-notification">
                 <FaBell />
                 {unreadCount > 0 && <Badge className="badge">{unreadCount}</Badge>}
               </Nav.Link>
-              <Button className="hod-logout-btn ms-3" onClick={handleLogout}>Logout</Button>
+              <Button className="hod-logout-btn ms-3" onClick={handleLogout}>
+                Logout
+              </Button>
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -82,7 +96,13 @@ const HODSettings = () => {
             <Form className="hod-form">
               <Form.Group className="mb-3">
                 <Form.Label>Name</Form.Label>
-                <Form.Control type="text" name="name" value={hodDetails.name} onChange={handleChange} placeholder="Enter Name" />
+                <Form.Control
+                  type="text"
+                  name="name"
+                  value={hodDetails.name}
+                  onChange={handleChange}
+                  placeholder="Enter Name"
+                />
               </Form.Group>
 
               <Form.Group className="mb-3">
@@ -92,20 +112,40 @@ const HODSettings = () => {
 
               <Form.Group className="mb-3">
                 <Form.Label>Branch</Form.Label>
-                <Form.Control type="text" name="branch" value={hodDetails.branch} onChange={handleChange} placeholder="Enter Branch" />
+                <Form.Control
+                  type="text"
+                  name="branch"
+                  value={hodDetails.branch}
+                  onChange={handleChange}
+                  placeholder="Enter Branch"
+                />
               </Form.Group>
 
               <Form.Group className="mb-3">
                 <Form.Label>Department</Form.Label>
-                <Form.Control type="text" name="department" value={hodDetails.department} onChange={handleChange} placeholder="Enter Department" />
+                <Form.Control
+                  type="text"
+                  name="department"
+                  value={hodDetails.department}
+                  onChange={handleChange}
+                  placeholder="Enter Department"
+                />
               </Form.Group>
 
               <Form.Group className="mb-3">
                 <Form.Label>Contact</Form.Label>
-                <Form.Control type="text" name="contact" value={hodDetails.contact} onChange={handleChange} placeholder="Enter Contact Number" />
+                <Form.Control
+                  type="text"
+                  name="contact"
+                  value={hodDetails.contact}
+                  onChange={handleChange}
+                  placeholder="Enter Contact Number"
+                />
               </Form.Group>
 
-              <Button className="hod-save-btn" onClick={handleSave}>Save Changes</Button>
+              <Button className="hod-save-btn" onClick={handleSave}>
+                Save Changes
+              </Button>
             </Form>
           </Card.Body>
         </Card>
@@ -116,15 +156,29 @@ const HODSettings = () => {
             <Form className="hod-form">
               <Form.Group className="mb-3">
                 <Form.Label>New Password</Form.Label>
-                <Form.Control type="password" name="password" value={hodDetails.password} onChange={handleChange} placeholder="Enter New Password" />
+                <Form.Control
+                  type="password"
+                  name="password"
+                  value={hodDetails.password}
+                  onChange={handleChange}
+                  placeholder="Enter New Password"
+                />
               </Form.Group>
 
               <Form.Group className="mb-3">
                 <Form.Label>Confirm Password</Form.Label>
-                <Form.Control type="password" name="confirmPassword" value={hodDetails.confirmPassword} onChange={handleChange} placeholder="Confirm New Password" />
+                <Form.Control
+                  type="password"
+                  name="confirmPassword"
+                  value={hodDetails.confirmPassword}
+                  onChange={handleChange}
+                  placeholder="Confirm New Password"
+                />
               </Form.Group>
 
-              <Button className="hod-password-btn" onClick={handlePasswordChange}>Update Password</Button>
+              <Button className="hod-password-btn" onClick={handlePasswordChange}>
+                Update Password
+              </Button>
             </Form>
           </Card.Body>
         </Card>
