@@ -119,8 +119,18 @@ body {
   text-align: center;
 }
 
+.card span {
+  color: #E0E0E0; /* Ensure text is visible */
+}
+
 .card:hover {
   transform: scale(1.05);
+}
+
+/* Icon inside card */
+.card .icon {
+  font-size: 24px;
+  color: #28A745; /* Ensure icon is visible */
 }
 
 /* Activity Logs Table */

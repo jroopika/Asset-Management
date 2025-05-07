@@ -80,19 +80,23 @@ router.put("/request/:id", async (req, res) => {
   }
 });
 
-// ✅ 3️⃣ Fetch all requests
+// ✅ Fetch all requests - safe version
 router.get("/all", async (req, res) => {
   try {
     const requests = await Request.find()
       .populate("userId", "name email")
       .sort({ createdAt: -1 });
 
-    res.status(200).json(requests);
+    // Filter out any requests with missing users
+    const filtered = requests.filter(req => req.userId !== null);
+
+    res.status(200).json(filtered);
   } catch (error) {
     console.error("Error in GET /all:", error.message);
     res.status(500).json({ error: "Failed to fetch requests" });
   }
 });
+
 
 // ✅ 4️⃣ Fetch all pending requests for HOD
 router.get("/pending", async (req, res) => {

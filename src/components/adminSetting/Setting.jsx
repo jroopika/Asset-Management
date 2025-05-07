@@ -1,63 +1,86 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Setting.css";
 
 const AdminSettings = () => {
+  const storedUser = JSON.parse(localStorage.getItem("user"));
   const [message, setMessage] = useState("");
   const [adminData, setAdminData] = useState({
-    username: "Manideep",
-    empid: "123",
-    dept: "CSE",
-    email: "mani@kmit.in",
+    name: storedUser?.name || "",
+    email: storedUser?.email || "",
     password: "",
     confirmPassword: "",
-    theme: localStorage.getItem("theme") || "dark",
-    notification: true,
   });
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    document.body.classList.add(`theme-${adminData.theme}`);
-    localStorage.setItem("theme", adminData.theme);
-    return () => document.body.classList.remove(`theme-${adminData.theme}`);
-  }, [adminData.theme]);
-
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value } = e.target;
     setAdminData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: value,
     }));
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (adminData.password !== adminData.confirmPassword) {
       setMessage("❌ Passwords do not match");
       return;
     }
-    setMessage("✅ Profile updated successfully!");
-    setAdminData({ ...adminData, password: "", confirmPassword: "" });
+
+    try {
+      const token = localStorage.getItem("token");
+      const userId = storedUser._id;
+
+      const payload = {
+        name: adminData.name,
+        email: adminData.email,
+        password: adminData.password,
+      };
+
+      console.log("Sending payload to backend:", payload); // Log the data
+
+      const res = await fetch(`http://localhost:5000/api/auth/users/${userId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+      console.log("Backend response:", data); // Log the response
+
+      if (res.ok) {
+        setMessage("✅ Profile updated successfully!");
+        localStorage.setItem("user", JSON.stringify(data));
+        setAdminData((prev) => ({
+          ...prev,
+          password: "",
+          confirmPassword: "",
+        }));
+      } else {
+        setMessage(`❌ ${data.message}`);
+      }
+    } catch (err) {
+      console.log("Error during save:", err);
+      setMessage("❌ Failed to update profile");
+    }
   };
 
   const handleLogout = () => {
-    // Clear all localStorage
     localStorage.clear();
-
-    // Navigate to login with replace to avoid adding to history
     navigate("/login", { replace: true });
 
-    // Push multiple login entries to block back navigation
     window.history.pushState(null, "", "/login");
     window.history.pushState(null, "", "/login");
 
-    // Add popstate listener to prevent back navigation
     const handlePopState = () => {
       navigate("/login", { replace: true });
     };
     window.addEventListener("popstate", handlePopState);
 
-    // Clean up listener on component unmount
     return () => {
       window.removeEventListener("popstate", handlePopState);
     };
@@ -84,27 +107,11 @@ const AdminSettings = () => {
         {message && <p className="admin-settings-message">{message}</p>}
 
         <form className="admin-settings-form">
-          <label>Username:</label>
+          <label>Name:</label>
           <input
             type="text"
-            name="username"
-            value={adminData.username}
-            onChange={handleChange}
-          />
-
-          <label>Emp ID:</label>
-          <input
-            type="text"
-            name="empid"
-            value={adminData.empid}
-            onChange={handleChange}
-          />
-
-          <label>Department:</label>
-          <input
-            type="text"
-            name="dept"
-            value={adminData.dept}
+            name="name"
+            value={adminData.name}
             onChange={handleChange}
           />
 
@@ -134,27 +141,7 @@ const AdminSettings = () => {
             placeholder="Confirm new password"
           />
 
-          <label>Theme:</label>
-          <select name="theme" value={adminData.theme} onChange={handleChange}>
-            <option value="dark">Dark</option>
-            <option value="light">Light</option>
-          </select>
-
-          <label>
-            <input
-              type="checkbox"
-              name="notification"
-              checked={adminData.notification}
-              onChange={handleChange}
-            />
-            Enable Notifications
-          </label>
-
-          <button
-            type="button"
-            className="admin-save-btn"
-            onClick={handleSave}
-          >
+          <button type="button" className="admin-save-btn" onClick={handleSave}>
             Save Changes
           </button>
         </form>

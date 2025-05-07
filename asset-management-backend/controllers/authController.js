@@ -11,7 +11,7 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
-// Create new user
+// Create new user (admin)
 exports.createUser = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
@@ -35,35 +35,7 @@ exports.createUser = async (req, res) => {
   }
 };
 
-// Update user
-exports.updateUser = async (req, res) => {
-  try {
-    const { name, email, password, role } = req.body;
-
-    const updateData = {
-      name,
-      email,
-      role: role.toLowerCase(),
-    };
-
-    if (password && password.trim() !== "") {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      updateData.password = hashedPassword;
-    }
-
-    const updatedUser = await User.findByIdAndUpdate(req.params.id, updateData, {
-      new: true,
-    });
-
-    if (!updatedUser) return res.status(404).json({ message: "User not found" });
-
-    res.status(200).json({ ...updatedUser._doc, password: undefined });
-  } catch (err) {
-    res.status(500).json({ message: "Error updating user", error: err.message });
-  }
-};
-
-// Delete user
+// Delete user (admin)
 exports.deleteUser = async (req, res) => {
   try {
     const deletedUser = await User.findByIdAndDelete(req.params.id);
@@ -72,5 +44,40 @@ exports.deleteUser = async (req, res) => {
     res.status(200).json({ message: "User deleted successfully" });
   } catch (err) {
     res.status(500).json({ message: "Error deleting user", error: err.message });
+  }
+};
+
+// Update user (admin, hod, user for self, admin for any)
+exports.updateUser = async (req, res) => {
+  try {
+    const { name, email, password, role } = req.body;
+    const userId = req.params.id;
+
+    // Allow self-update for any role or admin to update any user
+    if (req.user._id.toString() !== userId && req.user.role !== "admin") {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
+    const updateData = { name, email };
+
+    // Only allow role update if admin
+    if (role && req.user.role === "admin") {
+      updateData.role = role.toLowerCase();
+    }
+
+    if (password && password.trim() !== "") {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      updateData.password = hashedPassword;
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(userId, updateData, {
+      new: true,
+    }).select("-password");
+
+    if (!updatedUser) return res.status(404).json({ message: "User not found" });
+
+    res.status(200).json(updatedUser);
+  } catch (err) {
+    res.status(500).json({ message: "Error updating user", error: err.message });
   }
 };

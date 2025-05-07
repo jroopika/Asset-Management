@@ -62,7 +62,11 @@ router.post("/login", async (req, res) => {
 // 🔐 Admin Routes
 router.get("/users", protect, adminOnly, userController.getAllUsers);
 router.post("/users", protect, adminOnly, userController.createUser);
-router.put("/users/:id", protect, adminOnly, userController.updateUser);
+
+// ✅ Allow user to update their own profile OR admin to update any user
+router.put("/users/:id", protect, userController.updateUser);
+
+// 🔐 Only admin can delete users
 router.delete("/users/:id", protect, adminOnly, userController.deleteUser);
 
 module.exports = router;

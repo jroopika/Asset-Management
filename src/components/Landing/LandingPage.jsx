@@ -63,28 +63,28 @@ const LandingPage = () => {
           <p className="section-description">Explore our powerful features designed to help you manage your assets effortlessly.</p>
           <div className="row">
             <div className="col-md-6 col-lg-4">
-              <div className="card feature-card">
+              
                 <div className="card-body">
                   <h5 className="card-title">Real-time Asset Tracking</h5>
                   <p className="card-text">Track all your assets in real-time with detailed information and updates.</p>
                 </div>
-              </div>
+              
             </div>
             <div className="col-md-6 col-lg-4">
-              <div className="card feature-card">
+              
                 <div className="card-body">
                   <h5 className="card-title">Detailed Analytics and Reporting</h5>
                   <p className="card-text">Get comprehensive insights with visual analytics and detailed reports.</p>
                 </div>
-              </div>
+              
             </div>
             <div className="col-md-6 col-lg-4">
-              <div className="card feature-card">
+              
                 <div className="card-body">
                   <h5 className="card-title">Customizable Alerts</h5>
                   <p className="card-text">Set alerts and notifications to stay informed about important changes.</p>
                 </div>
-              </div>
+              
             </div>
           </div>
         </div>
@@ -94,22 +94,22 @@ const LandingPage = () => {
 <section id="about" className="about-section">
   <div className="container">
     <h2 className="section-title">About Us</h2>
-    <div className="card about-card">
+    
       <div className="card-body">
       <h5 className="card-title">Our mission</h5>
       <p className="card-text">
           To simplify asset management for individuals and businesses through innovative technology and intuitive design.
         </p>
       </div>
-    </div>
-    <div className="card about-card">
+    
+    
       <div className="card-body">
         <h5 className="card-title">Our Vision</h5>
         <p className="card-text">
           Empowering businesses with the tools they need to manage assets efficiently and securely.
         </p>
       </div>
-    </div>
+    
   </div>
 </section>
 

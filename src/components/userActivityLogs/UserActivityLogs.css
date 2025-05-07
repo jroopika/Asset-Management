@@ -74,4 +74,88 @@
       width: 90%;
     }
   }
+  .page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #121212;
+    color: #E0E0E0;
+    font-family: 'Lucida Sans', sans-serif;
+  }
   
+  h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #FFFFFF;
+  }
+  
+  .loading-message {
+    font-size: 16px;
+    color: #888;
+    text-align: center;
+  }
+  
+  .error-message {
+    color: #FF5555;
+    font-size: 16px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .activity-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #1F1F1F;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .activity-table th,
+  .activity-table td {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 16px;
+    border-bottom: 1px solid #333;
+  }
+  
+  .activity-table th {
+    background-color: #28A745;
+    color: #FFFFFF;
+    text-transform: uppercase;
+  }
+  
+  .activity-table tr:nth-child(even) {
+    background-color: #2A2A2A;
+  }
+  
+  .activity-table tr:hover {
+    background-color: #3A3A3A;
+  }
+  
+  .action-request {
+    color: #FFA500; /* Orange for requests */
+  }
+  
+  .action-assigned {
+    color: #28A745; /* Green for assignments */
+  }
+  
+  .action-returned {
+    color: #1E90FF; /* Blue for returns */
+  }
+  
+  .action-issue {
+    color: #FF5555; /* Red for issues */
+  }
+  
+  .action-resolved {
+    color: #00CED1; /* Cyan for resolved issues */
+  }
+  
+  .action-approved {
+    color: #90EE90; /* Light green for approvals */
+  }
+  
+  .action-rejected {
+    color: #FF69B4; /* Pink for rejections */
+  }

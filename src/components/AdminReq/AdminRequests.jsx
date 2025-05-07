@@ -28,23 +28,20 @@ const AdminRequests = () => {
     try {
       const request = requests.find((req) => req._id === id);
 
-      // Ensure the request has been approved by HOD before admin can act
       if (request.status !== "approved" && action !== "approved") {
         alert("This request must be approved by HOD before the admin can approve or reject it.");
         return;
       }
 
-      // Admin approving or rejecting the request
       const approvedBy = localStorage.getItem("userId");
       const updatedRequest = { ...request, status: action, approvedBy };
 
-      // Update the request in the backend
       await axios.put(`http://localhost:5000/api/requests/request/${id}`, updatedRequest);
 
-      // Update the state locally
       setRequests((prevRequests) =>
         prevRequests.map((req) => (req._id === id ? { ...req, status: action } : req))
       );
+
       alert(`Request ${action} successfully`);
     } catch (error) {
       console.error("Error performing action:", error);
@@ -58,27 +55,26 @@ const AdminRequests = () => {
 
   return (
     <div className="admin-requests-container">
-      {/* Navbar */}
-            <nav className="navbar">
-              <h2 className="navbar-title">ADMIN PANEL</h2>
-              <div className="nav-links">
-                <Link to="/manageasset">Manage Assets</Link>
-                <Link to="/manageUsers">Manage Users</Link>
-                  <Link to="/AdminReq">Manage Requests</Link>
-                <Link to="/AdminIssues">Issues </Link>
-                <Link to="/adminSetting">Settings</Link>
-              </div>
-            </nav>
+      <nav className="navbar">
+        <h2 className="navbar-title">ADMIN PANEL</h2>
+        <div className="nav-links">
+          <Link to="/manageasset">Manage Assets</Link>
+          <Link to="/manageUsers">Manage Users</Link>
+          <Link to="/AdminReq">Manage Requests</Link>
+          <Link to="/AdminIssues">Issues</Link>
+          <Link to="/adminSetting">Settings</Link>
+        </div>
+      </nav>
 
       <h1>Asset Requests</h1>
-      
+
       {requests.length === 0 ? (
         <p>No pending requests.</p>
       ) : (
         <table className="requests-table">
           <thead>
             <tr>
-              <th>User ID</th>
+              <th>User</th>
               <th>Asset Type</th>
               <th>Reason</th>
               <th>Status</th>
@@ -88,7 +84,7 @@ const AdminRequests = () => {
           <tbody>
             {requests.map((req) => (
               <tr key={req._id}>
-                <td>{req.userId.name || "Unknown User"}</td>
+                <td>{req.userId?.name || "Unknown User"}</td>
                 <td>{req.assetType}</td>
                 <td>{req.reason}</td>
                 <td>{req.status}</td>

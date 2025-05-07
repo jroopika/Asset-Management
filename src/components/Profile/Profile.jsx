@@ -5,6 +5,7 @@ import "./Profile.css";
 const Profile = () => {
   // Initialize user state with empty values or localStorage data if available
   const [user, setUser] = useState({
+    _id: "",
     name: "",
     email: "",
     password: "********", // Hiding real password
@@ -23,6 +24,7 @@ const Profile = () => {
         // Safely parse user data
         const parsedUser = JSON.parse(userData);
         setUser({
+          _id: parsedUser._id || "",
           name: parsedUser.name || "",
           email: parsedUser.email || "",
           password: "********", // Hide password by default
@@ -33,35 +35,94 @@ const Profile = () => {
     }
   }, []);
 
-  // Handle input change for name
+  // Handle input change for name and email
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser((prevUser) => ({ ...prevUser, [name]: value }));
   };
 
   // Handle save button click
-  const handleSave = () => {
+  const handleSave = async () => {
     if (newPassword && newPassword !== confirmPassword) {
       setMessage("❌ Passwords do not match");
       return;
     }
 
+    // Prepare update data
+    const updateData = {
+      name: user.name,
+      email: user.email,
+    };
     if (newPassword) {
-      setUser((prev) => ({ ...prev, password: newPassword }));
+      updateData.password = newPassword;
     }
 
-    // Update localStorage with new user data
-    const updatedUser = {
-      ...user,
-      password: newPassword || user.password, // Use the new password if provided
-    };
-    localStorage.setItem("user", JSON.stringify(updatedUser));
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setMessage("❌ No authentication token found");
+        return;
+      }
 
-    // Clear password fields and exit edit mode
-    setNewPassword("");
-    setConfirmPassword("");
-    setEditMode(false);
-    setMessage("✅ Profile updated successfully!");
+      // Use environment variable for API base URL or fallback to localhost
+      const apiBaseUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";
+      const url = `${apiBaseUrl}/api/auth/users/${user._id}`;
+
+      // Send update request to backend
+      const response = await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(updateData),
+      });
+
+      // Log response for debugging
+      console.log("Response status:", response.status);
+      const contentType = response.headers.get("Content-Type");
+      console.log("Content-Type:", contentType);
+
+      // Check if response is JSON
+      if (!contentType || !contentType.includes("application/json")) {
+        const text = await response.text();
+        console.error("Non-JSON response:", text);
+        setMessage(`❌ Server returned non-JSON response: ${response.status}`);
+        return;
+      }
+
+      const result = await response.json();
+      if (!response.ok) {
+        setMessage(`❌ ${result.message || "Error updating profile"}`);
+        return;
+      }
+
+      // Update localStorage with new user data
+      const updatedUser = {
+        _id: user._id,
+        name: result.name,
+        email: result.email,
+        role: result.role,
+      };
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+
+      // Update state
+      setUser((prev) => ({
+        ...prev,
+        name: result.name,
+        email: result.email,
+        password: newPassword ? "********" : prev.password,
+      }));
+
+      // Clear password fields and exit edit mode
+      setNewPassword("");
+      setConfirmPassword("");
+      setEditMode(false);
+      setMessage("✅ Profile updated successfully!");
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      setMessage("❌ Server error");
+    }
   };
 
   return (
@@ -85,7 +146,17 @@ const Profile = () => {
         )}
 
         <label className="user-profile-label">Email:</label>
-        <p>{user.email}</p>
+        {editMode ? (
+          <input
+            type="email"
+            name="email"
+            value={user.email}
+            onChange={handleChange}
+            className="user-profile-input"
+          />
+        ) : (
+          <p>{user.email}</p>
+        )}
 
         <label className="user-profile-label">Password:</label>
         {editMode ? (

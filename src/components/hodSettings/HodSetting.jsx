@@ -1,57 +1,109 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState } from "react";
-import {
-  Badge,
-  Button,
-  Card,
-  Container,
-  Form,
-  Nav,
-  Navbar,
-} from "react-bootstrap";
+import { Badge, Button, Card, Container, Form, Nav, Navbar } from "react-bootstrap";
 import { FaBell } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import "./HodSetting.css";
 
 const HODSettings = () => {
-  const [hodDetails, setHodDetails] = useState({
-    name: "Dr. Rajesh Kumar",
-    email: "rajesh.kumar@example.com",
-    branch: "Computer Science",
-    department: "Engineering",
-    contact: "+91 9876543210",
+  const storedUser = JSON.parse(localStorage.getItem("user")) || {};
+  const [message, setMessage] = useState("");
+  const [hodData, setHodData] = useState({
+    name: storedUser.name || "",
+    email: storedUser.email || "",
     password: "",
     confirmPassword: "",
   });
 
-  const [message, setMessage] = useState("");
-  const [unreadCount] = useState(3);
-
+  const [unreadCount] = useState(3); // Example unread notifications count
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setHodDetails({ ...hodDetails, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setHodData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const handleSave = () => {
-    setMessage("Profile updated successfully! ✅");
-  };
-
-  const handlePasswordChange = () => {
-    if (hodDetails.password !== hodDetails.confirmPassword) {
-      setMessage("Passwords do not match ❌");
+  const handleSave = async () => {
+    if (hodData.password && hodData.password !== hodData.confirmPassword) {
+      setMessage("❌ Passwords do not match");
       return;
     }
-    setMessage("Password updated successfully! ✅");
-    setHodDetails({ ...hodDetails, password: "", confirmPassword: "" });
+
+    const token = localStorage.getItem("token");
+    const userId = storedUser._id;
+
+    if (!token || !userId) {
+      setMessage("❌ Authentication required. Please log in again.");
+      return;
+    }
+
+    const payload = {
+      name: hodData.name,
+      email: hodData.email,
+    };
+    if (hodData.password) {
+      payload.password = hodData.password;
+    }
+
+    try {
+      const apiBaseUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";
+      const url = `${apiBaseUrl}/api/auth/users/${userId}`;
+
+      const response = await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      console.log("Response status:", response.status);
+      const contentType = response.headers.get("Content-Type");
+      console.log("Content-Type:", contentType);
+
+      if (!contentType || !contentType.includes("application/json")) {
+        const text = await response.text();
+        console.error("Non-JSON response:", text);
+        setMessage(`❌ Server returned non-JSON response: ${response.status}`);
+        return;
+      }
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setMessage(`❌ ${data.message || "Error updating profile"}`);
+        return;
+      }
+
+      // Update localStorage with new user data
+      const updatedUser = {
+        _id: userId,
+        name: data.name,
+        email: data.email,
+        role: data.role,
+      };
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+
+      // Update state and clear password fields
+      setHodData({
+        name: data.name,
+        email: data.email,
+        password: "",
+        confirmPassword: "",
+      });
+      setMessage("✅ Profile updated successfully!");
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      setMessage("❌ Server error");
+    }
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
-    localStorage.removeItem("user");
-    // Clear history stack by pushing a new entry and replacing
-    window.history.pushState(null, null, "/login");
+    localStorage.clear();
     navigate("/login", { replace: true });
   };
 
@@ -99,7 +151,7 @@ const HODSettings = () => {
                 <Form.Control
                   type="text"
                   name="name"
-                  value={hodDetails.name}
+                  value={hodData.name}
                   onChange={handleChange}
                   placeholder="Enter Name"
                 />
@@ -107,59 +159,21 @@ const HODSettings = () => {
 
               <Form.Group className="mb-3">
                 <Form.Label>Email</Form.Label>
-                <Form.Control type="email" name="email" value={hodDetails.email} disabled />
-              </Form.Group>
-
-              <Form.Group className="mb-3">
-                <Form.Label>Branch</Form.Label>
                 <Form.Control
-                  type="text"
-                  name="branch"
-                  value={hodDetails.branch}
+                  type="email"
+                  name="email"
+                  value={hodData.email}
                   onChange={handleChange}
-                  placeholder="Enter Branch"
+                  placeholder="Enter Email"
                 />
               </Form.Group>
 
-              <Form.Group className="mb-3">
-                <Form.Label>Department</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="department"
-                  value={hodDetails.department}
-                  onChange={handleChange}
-                  placeholder="Enter Department"
-                />
-              </Form.Group>
-
-              <Form.Group className="mb-3">
-                <Form.Label>Contact</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="contact"
-                  value={hodDetails.contact}
-                  onChange={handleChange}
-                  placeholder="Enter Contact Number"
-                />
-              </Form.Group>
-
-              <Button className="hod-save-btn" onClick={handleSave}>
-                Save Changes
-              </Button>
-            </Form>
-          </Card.Body>
-        </Card>
-
-        <Card className="hod-card mb-4">
-          <Card.Header className="hod-card-header">Change Password</Card.Header>
-          <Card.Body>
-            <Form className="hod-form">
               <Form.Group className="mb-3">
                 <Form.Label>New Password</Form.Label>
                 <Form.Control
                   type="password"
                   name="password"
-                  value={hodDetails.password}
+                  value={hodData.password}
                   onChange={handleChange}
                   placeholder="Enter New Password"
                 />
@@ -170,14 +184,14 @@ const HODSettings = () => {
                 <Form.Control
                   type="password"
                   name="confirmPassword"
-                  value={hodDetails.confirmPassword}
+                  value={hodData.confirmPassword}
                   onChange={handleChange}
                   placeholder="Confirm New Password"
                 />
               </Form.Group>
 
-              <Button className="hod-password-btn" onClick={handlePasswordChange}>
-                Update Password
+              <Button className="hod-save-btn" onClick={handleSave}>
+                Save Changes
               </Button>
             </Form>
           </Card.Body>
